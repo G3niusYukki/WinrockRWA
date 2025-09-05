@@ -3,152 +3,93 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>大宗商品贸易 / Bulk Commodities Trade</title>
-  <meta name="color-scheme" content="light">
+  <title>加密市场 Top 100 / Crypto Top 100</title>
+  <meta name="color-scheme" content="light dark">
   <style>
-    /* ---------- Design Tokens ---------- */
+    /* ===== Design tokens ===== */
     :root{
-      --bg: radial-gradient(1200px 800px at 10% -10%, #eef5ff 0%, transparent 50%),
+      --bg: radial-gradient(1200px 800px at 10% -10%, #eef5ff 0%, transparent 55%),
             radial-gradient(1000px 700px at 90% 0%, #fff6ee 0%, transparent 45%),
             linear-gradient(180deg, #f8fbff 0%, #f7f7fb 100%);
-      --panel: rgba(255,255,255,.72);
-      --card: rgba(255,255,255,.82);
-      --text: #0f172a;
-      --muted:#56607a;
-      --border: rgba(15,23,42,.08);
-      --brand:#246bff;
-      --brand-ghost:#e8f0ff;
-      --ok:#0ea5e9;
-      --warn:#fb923c;
-      --shadow: 0 10px 30px rgba(15,23,42,.08);
-      --radius: 14px;
+      --panel: color-mix(in srgb, white 78%, transparent);
+      --card: color-mix(in srgb, white 86%, transparent);
+      --text: #0f172a; --muted:#475569; --border: rgba(15,23,42,.08);
+      --brand:#2563eb; --ok:#16a34a; --down:#ef4444; --warn:#f59e0b;
+      --shadow: 0 12px 36px rgba(15,23,42,.10);
+      --radius: 14px; --focus: 0 0 0 3px color-mix(in srgb, var(--brand) 30%, transparent);
       --chip: rgba(15,23,42,.05);
-      --chip-active: #101828;
-      --chip-active-fg:#fff;
-      --focus: 0 0 0 3px rgba(36,107,255,.25);
     }
-
-    /* ---------- Base ---------- */
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: linear-gradient(180deg,#0b1220,#0d1117);
+        --panel: rgba(17,24,39,.5); --card: rgba(17,24,39,.65);
+        --text: #e5e7eb; --muted:#94a3b8; --border: rgba(148,163,184,.2);
+        --shadow: 0 12px 36px rgba(0,0,0,.35);
+        --chip: rgba(255,255,255,.06);
+      }
+    }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0; color:var(--text); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", "PingFang SC", "Noto Sans CJK", "Microsoft YaHei", Arial, sans-serif;
-      background: var(--bg) fixed;
-    }
-    a{color:inherit}
-    .container{max-width:1200px; margin:0 auto; padding:24px}
+    body{margin:0; color:var(--text); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", "PingFang SC","Noto Sans", Arial, sans-serif; background: var(--bg) fixed}
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1200px; margin:0 auto; padding:20px}
 
-    /* ---------- Header ---------- */
-    .app-header{
-      position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(10px);
-      background:var(--panel); border-bottom:1px solid var(--border);
-    }
+    /* ===== Header / toolbar ===== */
+    .app-header{position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(10px); background:var(--panel); border-bottom:1px solid var(--border)}
     .toolbar{display:flex; gap:16px; align-items:center; justify-content:space-between}
-    .brand{
-      display:flex; align-items:center; gap:12px; padding:10px 0;
-      font-weight:700; letter-spacing:.2px;
-    }
-    .brand-badge{display:inline-grid; place-items:center; width:36px; height:36px;
-      border-radius:9px; background:linear-gradient(135deg,#246bff 0%,#8b5cf6 100%); color:#fff; font-weight:800}
-    .brand span{font-size:18px}
+    .brand{display:flex; align-items:center; gap:12px; padding:10px 0; font-weight:800; letter-spacing:.2px}
+    .badge{display:inline-grid; place-items:center; width:36px; height:36px; border-radius:9px; background:linear-gradient(135deg,#2563eb 0%,#8b5cf6 100%); color:#fff}
+    .search{flex:1; display:flex; align-items:center; gap:8px; max-width:520px; background:var(--card); padding:10px 12px; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow)}
+    .search input{flex:1; border:0; outline:0; background:transparent; font-size:15px; color:inherit}
+    .icon-btn{border:0; background:transparent; cursor:pointer; padding:8px; border-radius:10px}
+    .icon-btn:hover{background:rgba(0,0,0,.06)}
+    .chip-group{display:flex; gap:6px; background:var(--chip); padding:5px; border-radius:999px}
+    .chip{border:0; cursor:pointer; padding:8px 12px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700}
+    .chip.is-active{background:#0f172a; color:#fff; box-shadow:0 6px 20px rgba(16,24,40,.18)}
+    @media (prefers-color-scheme: dark){ .chip.is-active{background:#e2e8f0; color:#111827} }
 
-    .search{
-      flex:1; display:flex; align-items:center; gap:8px; max-width:520px; background:var(--card);
-      padding:10px 12px; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow)
-    }
-    .search input{
-      flex:1; border:0; outline:0; background:transparent; font-size:15px
-    }
-    .icon-btn{border:0; background:transparent; cursor:pointer; padding:6px; border-radius:8px}
-    .icon-btn:hover{background:rgba(15,23,42,.06)}
+    /* ===== Hero / global stats ===== */
+    .hero{margin:18px 0 12px; display:grid; gap:14px; grid-template-columns: 1.3fr 1fr}
+    .panel{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
+    .stats{display:grid; gap:10px; grid-template-columns: repeat(3,1fr)}
+    .stat{display:flex; flex-direction:column; gap:2px}
+    .stat .k{font-size:13px; color:var(--muted)}
+    .stat .v{font-size:20px; font-weight:900}
+    .delta.up{color:var(--ok)} .delta.down{color:var(--down)}
+    .settings{display:flex; gap:10px; align-items:center; justify-content:flex-end}
 
-    .controls{display:flex; align-items:center; gap:12px}
-    .chip-group{display:flex; gap:6px; background:rgba(15,23,42,.04); padding:5px; border-radius:99px}
-    .chip{
-      border:0; cursor:pointer; padding:8px 12px; border-radius:99px; background:transparent; color:var(--muted); font-weight:600
-    }
-    .chip.is-active{background:var(--chip-active); color:var(--chip-active-fg); box-shadow:0 6px 20px rgba(16,24,40,.2)}
+    /* ===== Table ===== */
+    .table{margin-top:12px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:auto}
+    table{width:100%; border-collapse:separate; border-spacing:0}
+    thead th{position:sticky; top:0; background:color-mix(in srgb, var(--card) 90%, transparent); backdrop-filter:blur(6px); font-size:12px; color:var(--muted); text-align:left; padding:10px; border-bottom:1px solid var(--border)}
+    tbody td{padding:12px 10px; border-bottom:1px solid var(--border); vertical-align:middle}
+    tbody tr:hover{background:rgba(0,0,0,.03)}
+    .rank{width:56px; text-align:right; font-variant-numeric:tabular-nums}
+    .coin{display:flex; align-items:center; gap:10px}
+    .coin img{width:28px; height:28px; border-radius:50%; box-shadow:0 0 0 1px var(--border); background:#fff; object-fit:cover}
+    .sym{color:var(--muted); font-size:12px}
+    .num{font-variant-numeric:tabular-nums}
+    .chg.up{color:var(--ok)} .chg.down{color:var(--down)}
+    .spark{width:120px; height:36px}
+    .actions{display:flex; gap:8px}
+    .btn{display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; background:#fff; font-weight:700; cursor:pointer}
+    .btn.primary{background:var(--brand); color:#fff; border-color:transparent}
+    @media (prefers-color-scheme: dark){ .btn{background:#0b1220; color:#e5e7eb} }
 
-    /* ---------- Filters ---------- */
-    .filters{
-      margin:18px 0 8px; display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap
-    }
-    .select{
-      display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--border);
-      padding:10px 12px; border-radius:12px; box-shadow:var(--shadow)
-    }
-    .select select{border:0; outline:0; background:transparent; font-weight:600}
-
-    /* ---------- Cards ---------- */
-    .grid{display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr))}
-    .card{
-      position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
-      box-shadow:var(--shadow); overflow:hidden; transition:transform .2s ease, box-shadow .2s ease
-    }
-    .card:hover{transform:translateY(-2px); box-shadow:0 14px 40px rgba(15,23,42,.12)}
-    .card .media{
-      height:96px; background:
-        radial-gradient(80px 60px at 20% 30%, rgba(36,107,255,.18), transparent 60%),
-        radial-gradient(80px 60px at 80% 70%, rgba(139,92,246,.18), transparent 60%),
-        linear-gradient(180deg, #fafbff, #fff)
-    }
-    .badge{
-      position:absolute; top:12px; left:12px; padding:6px 10px; border-radius:10px; font-size:12px; font-weight:700;
-      background:var(--brand-ghost); color:var(--brand); border:1px solid rgba(36,107,255,.15)
-    }
-    .body{padding:14px 14px 12px}
-    .title{font-weight:800; font-size:16px; margin:4px 0 6px}
-    .desc{color:var(--muted); font-size:13px; min-height:2.4em}
-    .meta{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 8px}
-    .tag{
-      font-size:12px; padding:6px 8px; border-radius:9px; background:var(--chip); color:#1f2937; border:1px solid var(--border)
-    }
-    .price{
-      display:flex; align-items:baseline; gap:8px; margin:8px 0 12px
-    }
-    .price .num{font-size:20px; font-weight:800}
-    .price .unit{color:var(--muted); font-size:12px}
-    .actions{display:flex; gap:10px}
-    .btn{
-      flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
-      padding:10px 12px; border-radius:12px; border:1px solid var(--border); background:#fff; font-weight:700
-    }
-    .btn.primary{background:var(--brand); border-color:transparent; color:#fff}
-    .btn.primary:focus{box-shadow:var(--focus)}
-    .btn:active{transform:translateY(1px)}
-
-    /* ---------- Modal ---------- */
-    .modal{position:fixed; inset:0; background:rgba(16,24,40,.35); display:flex; align-items:center; justify-content:center; padding:24px}
+    /* ===== Modal ===== */
+    .modal{position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; padding:22px}
     .hidden{display:none}
-    .modal-card{
-      width:min(720px, 100%); background:#fff; border-radius:16px; border:1px solid var(--border); box-shadow:0 30px 80px rgba(15,23,42,.2);
-      overflow:hidden
-    }
-    .modal-head{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--border)}
-    .modal-body{padding:18px}
-    .form{
-      display:grid; gap:12px; grid-template-columns: 1fr 1fr
-    }
-    .form-row{display:flex; gap:8px; align-items:center}
-    .form .col-1{grid-column:span 1} .form .col-2{grid-column:span 2}
-    label{font-size:13px; color:#374151; min-width:92px}
-    input, select, textarea{
-      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#fff; outline:none;
-    }
-    input:focus, select:focus, textarea:focus{box-shadow:var(--focus)}
-    textarea{min-height:96px; resize:vertical}
-    .toast{
-      position:fixed; right:16px; bottom:16px; background:#111827; color:#fff; padding:12px 14px; border-radius:10px; box-shadow:var(--shadow)
-    }
+    .modal-card{width:min(680px,100%); background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.35); overflow:hidden}
+    .modal-head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border)}
+    .modal-body{padding:16px}
+    .form{display:grid; gap:12px}
+    label{font-size:13px; color:var(--muted)}
+    input, select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:transparent; color:inherit}
+    input:focus, select:focus{outline:none; box-shadow:var(--focus)}
+    .helper{color:var(--muted); font-size:12px}
 
-    /* ---------- Footer ---------- */
-    footer{color:#64748b; font-size:12px; margin:28px 0; text-align:center}
-
-    @media (max-width:720px){
-      .toolbar{flex-wrap:wrap; gap:10px}
-      .search{order:3; width:100%}
-      .form{grid-template-columns:1fr}
-    }
+    footer{color:#94a3b8; font-size:12px; text-align:center; margin:18px 0}
+    @media (max-width:920px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr 1fr} .spark{display:none} }
   </style>
 </head>
 <body>
@@ -156,595 +97,550 @@
   <header class="app-header">
     <div class="container toolbar" role="navigation" aria-label="Top Navigation">
       <div class="brand">
-        <span class="brand-badge" aria-hidden="true">BC</span>
-        <span id="i-brand">大宗商品贸易</span>
+        <span class="badge" aria-hidden="true">₿</span>
+        <span id="i-brand">加密市场 Top 100</span>
       </div>
 
       <div class="search" role="search">
         <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23A6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0s.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        <input id="searchInput" type="search" placeholder="搜索商品 / Search products…" aria-label="Search products">
+        <input id="searchInput" type="search" placeholder="搜索币种 / Search…" aria-label="Search coins">
         <button id="clearSearch" class="icon-btn" title="Clear" aria-label="Clear search">✕</button>
       </div>
 
-      <div class="controls">
+      <div style="display:flex; align-items:center; gap:12px">
         <div class="chip-group" id="langSwitch" role="tablist" aria-label="Language">
           <button class="chip is-active" role="tab" data-lang="zh">中文</button>
           <button class="chip" role="tab" data-lang="en">EN</button>
         </div>
-        <div class="chip-group" id="ccySwitch" role="tablist" aria-label="Currency">
-          <button class="chip is-active" role="tab" data-ccy="CNY">CNY ¥</button>
-          <button class="chip" role="tab" data-ccy="USD">USD $</button>
-        </div>
+        <button id="walletBtn" class="btn primary">👜 <span id="i-connect">连接钱包</span></button>
+        <button id="settingsBtn" class="btn" title="API Key & 设置">⚙️</button>
       </div>
     </div>
   </header>
 
-  <!-- Filters -->
+  <!-- Hero -->
   <div class="container">
-    <section class="filters" aria-label="Filters">
-      <div class="chip-group" id="typeFilters" aria-label="Category filters">
-        <button class="chip is-active" data-type="all" id="flt-all">全部</button>
-        <button class="chip" data-type="gold" id="flt-gold">黄金</button>
-        <button class="chip" data-type="oil" id="flt-oil">石油</button>
-        <button class="chip" data-type="steel" id="flt-steel">钢材</button>
-        <button class="chip" data-type="nonferrous" id="flt-nonferrous">有色金属</button>
+    <section class="hero">
+      <div class="panel">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+          <h2 style="margin:0" id="i-marketOverview">市场概览</h2>
+          <div class="actions">
+            <button class="btn" id="refreshBtn">⟲ <span id="i-refresh">刷新</span></button>
+            <div class="chip-group" id="sortSwitch" aria-label="Sort">
+              <button class="chip is-active" data-sort="mcap">MC</button>
+              <button class="chip" data-sort="price">Price</button>
+              <button class="chip" data-sort="change24h">24h</button>
+            </div>
+          </div>
+        </div>
+        <div class="stats" style="margin-top:10px">
+          <div class="stat"><div class="k" id="i-gcap">全球总市值</div><div class="v" id="gcap">—</div></div>
+          <div class="stat"><div class="k" id="i-gdelta">24小时变动</div><div class="v" id="gdelta" class="delta">—</div></div>
+          <div class="stat"><div class="k" id="i-btcdom">BTC 占比</div><div class="v" id="btcdom">—</div></div>
+        </div>
       </div>
-      <div class="select">
-        <label for="sortSelect" id="i-sortBy">排序：</label>
-        <select id="sortSelect" aria-labelledby="i-sortBy">
-          <option value="featured">推荐</option>
-          <option value="priceAsc">价格从低到高</option>
-          <option value="priceDesc">价格从高到低</option>
-          <option value="nameAsc">名称 A-Z</option>
-        </select>
+      <div class="panel">
+        <div class="stat">
+          <div class="k" id="i-apiKeyLabel">CoinGecko API Key</div>
+          <div class="v" id="apiKeyState">未设置</div>
+        </div>
+        <p class="helper" id="i-apiHelp">
+          使用公开 Demo Key 也可以（仅限速不同）。未设置时仍可尝试回退数据。
+        </p>
+        <div class="actions">
+          <button class="btn" id="openKey" style="width:100%">🔑 <span id="i-openKey">设置 / 更换 Key</span></button>
+        </div>
       </div>
     </section>
 
-    <!-- Product Grid -->
-    <main>
-      <div id="productGrid" class="grid" aria-live="polite"></div>
-    </main>
+    <!-- Table -->
+    <section class="table" aria-label="Top 100 cryptocurrencies">
+      <table>
+        <thead>
+          <tr>
+            <th class="rank">#</th>
+            <th id="i-col-coin">币种</th>
+            <th id="i-col-price">价格(USD)</th>
+            <th id="i-col-mcap">市值</th>
+            <th id="i-col-24h">24h</th>
+            <th id="i-col-7d">7d</th>
+            <th id="i-col-vol">成交额(24h)</th>
+            <th id="i-col-act">操作</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
 
-    <footer id="i-disclaimer">* 所有价格均为示意价，仅用于演示。汇率为示例值（可对接后端自动更新）。</footer>
+    <footer id="i-disclaimer">
+      * 数据源优先 CoinGecko（需 API Key），失败时退化到 CoinCap 基础数据/图标。前端做了本地缓存和频率控制；请在真实产品中把 Key 放到后端代理更安全。
+    </footer>
   </div>
 
-  <!-- RFQ Modal -->
-  <div id="rfqModal" class="modal hidden" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rfqTitle">
+  <!-- Wallet Modal -->
+  <div id="walletModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="walletTitle">
       <div class="modal-head">
-        <h3 id="rfqTitle">请求报价</h3>
-        <button class="icon-btn" id="rfqClose" aria-label="Close">✕</button>
+        <h3 id="walletTitle">连接钱包</h3>
+        <button class="icon-btn" id="walletClose" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
-        <form id="rfqForm" class="form" novalidate>
-          <input type="hidden" id="rfqProductId">
-          <div class="col-2">
-            <label id="rfqProdLabel">商品</label>
-            <input type="text" id="rfqProductName" readonly>
+        <div class="form">
+          <div>
+            <label id="i-walletDetected">检测到的钱包</label>
+            <div id="walletDetectResult" class="helper">—</div>
           </div>
-
-          <div class="col-1">
-            <label id="rfqQtyLabel">数量</label>
-            <div class="form-row">
-              <input id="rfqQty" type="number" min="1" step="any" required aria-required="true">
-              <span id="rfqUnit" class="tag" aria-live="polite">单位</span>
-            </div>
+          <div>
+            <button class="btn primary" id="btnMetaMask">🦊 <span id="i-useMetaMask">使用 MetaMask</span></button>
           </div>
+          <div>
+            <button class="btn" id="btnMock">🎛️ <span id="i-useMock">使用模拟地址</span></button>
+            <div class="helper" id="i-mockNote">用于联调的占位方案，不会产生真实链上交互。</div>
+          </div>
+          <div>
+            <label id="i-walletAddr">当前地址</label>
+            <input id="currentAddr" readonly placeholder="0x…"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <div class="col-1">
-            <label id="rfqIncotermLabel">贸易术语</label>
-            <select id="rfqIncoterm">
-              <option>FOB</option><option>CIF</option><option>CFR</option>
-              <option>EXW</option><option>DAP</option>
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-head">
+        <h3 id="settingsTitle">设置</h3>
+        <button class="icon-btn" id="settingsClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="settingsForm" class="form" novalidate>
+          <div>
+            <label for="apiKeyInput">CoinGecko API Key</label>
+            <input id="apiKeyInput" placeholder="粘贴你的 x-cg-demo-api-key" />
+            <div class="helper" id="i-keyHelper">建议用请求头方式（更安全）；也支持 query 参数。仅做演示存储在本地。</div>
+          </div>
+          <div>
+            <label for="localeSelect" id="i-langLabel">界面语言</label>
+            <select id="localeSelect">
+              <option value="zh">中文</option>
+              <option value="en">English</option>
             </select>
           </div>
-
-          <div class="col-1">
-            <label id="rfqPortLabel">目的港/交付地</label>
-            <input id="rfqPort" placeholder="例如 Shanghai / Rotterdam / Singapore" required>
-          </div>
-
-          <div class="col-1">
-            <label id="rfqCompanyLabel">公司</label>
-            <input id="rfqCompany" required>
-          </div>
-
-          <div class="col-1">
-            <label id="rfqContactLabel">联系人</label>
-            <input id="rfqContact" required>
-          </div>
-
-          <div class="col-1">
-            <label id="rfqEmailLabel">邮箱</label>
-            <input id="rfqEmail" type="email" required>
-          </div>
-
-          <div class="col-1">
-            <label id="rfqPhoneLabel">电话</label>
-            <input id="rfqPhone" type="tel">
-          </div>
-
-          <div class="col-2">
-            <label id="rfqNoteLabel">备注</label>
-            <textarea id="rfqNote" placeholder=""></textarea>
-          </div>
-
-          <div class="col-2" style="display:flex; gap:12px; justify-content:flex-end; margin-top:6px">
-            <button type="button" class="btn" id="rfqCancel">取消</button>
-            <button type="submit" class="btn primary" id="rfqSubmit">提交</button>
+          <div class="actions" style="justify-content:flex-end">
+            <button type="button" class="btn" id="btnClearKey">清除 Key</button>
+            <button type="submit" class="btn primary" id="btnSaveSettings">保存</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 
-  <template id="card">
-    <article class="card">
-      <div class="media"></div>
-      <span class="badge">TYPE</span>
-      <div class="body">
-        <div class="title">TITLE</div>
-        <div class="desc">DESC</div>
-        <div class="meta"></div>
-        <div class="price"><span class="num">—</span><span class="unit">/ UNIT</span></div>
-        <div class="actions">
-          <button class="btn" data-role="details"><span class="i-details">详情</span></button>
-          <button class="btn primary" data-role="rfq"><span class="i-rfq">请求报价</span></button>
+  <template id="row">
+    <tr>
+      <td class="rank num">1</td>
+      <td>
+        <div class="coin">
+          <img alt="logo" loading="lazy" referrerpolicy="no-referrer" />
+          <div>
+            <div class="name">Bitcoin</div>
+            <div class="sym">BTC</div>
+          </div>
         </div>
-      </div>
-    </article>
+      </td>
+      <td class="num price">$—</td>
+      <td class="num mcap">$—</td>
+      <td class="num chg chg24">—</td>
+      <td>
+        <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="num chg chg7" style="font-size:12px; margin-top:2px">—</div>
+      </td>
+      <td class="num vol">$—</td>
+      <td>
+        <div class="actions">
+          <a class="btn" target="_blank" rel="noopener" data-role="open">🔎 <span class="i-open">详情</span></a>
+        </div>
+      </td>
+    </tr>
   </template>
 
   <script>
   ;(() => {
-    /* ============ i18n ============ */
+    /* ========= i18n ========= */
     const i18n = {
       zh: {
-        brand: "大宗商品贸易",
-        search_placeholder: "搜索商品 / Search products…",
-        filters: { all:"全部", gold:"黄金", oil:"石油", steel:"钢材", nonferrous:"有色金属" },
-        sortBy: "排序：",
-        sort: { featured:"推荐", priceAsc:"价格从低到高", priceDesc:"价格从高到低", nameAsc:"名称 A-Z" },
-        unit: { t_oz:"金衡盎司", bbl:"桶", ton:"吨" },
-        card: {
-          grade:"品位",
-          spec:"规格",
-          origin:"产地/标准",
-          lot:"批量",
-          moq:"起订量",
-          incoterms:"可选贸易术语",
-          indicative:"示意价",
-          updated:"更新",
-          details:"详情",
-          rfq:"请求报价"
-        },
-        rfq: {
-          title:"请求报价",
-          prod:"商品",
-          qty:"数量",
-          unit:"单位",
-          incoterm:"贸易术语",
-          port:"目的港/交付地",
-          company:"公司",
-          contact:"联系人",
-          email:"邮箱",
-          phone:"电话",
-          note:"备注",
-          cancel:"取消",
-          submit:"提交",
-          success:"已提交请求（演示）。我们会尽快与您联系。"
-        },
-        disclaimer:"* 所有价格均为示意价，仅用于演示。汇率为示例值（可对接后端自动更新）。"
+        brand:"加密市场 Top 100",
+        search_placeholder:"搜索币种 / Search…",
+        marketOverview:"市场概览",
+        refresh:"刷新",
+        gcap:"全球总市值",
+        gdelta:"24小时变动",
+        btcdom:"BTC 占比",
+        apiKeyLabel:"CoinGecko API Key",
+        apiHelp:"使用公开 Demo Key 也可以（仅限速不同）。未设置时仍可尝试回退数据。",
+        openKey:"设置 / 更换 Key",
+        col:{coin:"币种", price:"价格(USD)", mcap:"市值", d24:"24h", d7:"7d", vol:"成交额(24h)", act:"操作"},
+        connect:"连接钱包",
+        wallet:{title:"连接钱包", detected:"检测到的钱包", useMM:"使用 MetaMask", useMock:"使用模拟地址", mockNote:"用于联调的占位方案，不会产生真实链上交互。", addr:"当前地址"},
+        settings:{title:"设置", keyHelper:"建议用请求头方式（更安全）；也支持 query 参数。仅做演示存储在本地。", langLabel:"界面语言", save:"保存", clearKey:"清除 Key"},
+        open:"详情",
+        disclaimer:"* 数据源优先 CoinGecko（需 API Key），失败时退化到 CoinCap 基础数据/图标。请在真实产品中将 Key 下发到后端代理。"
       },
       en: {
-        brand: "Bulk Commodities Trade",
-        search_placeholder: "Search products…",
-        filters: { all:"All", gold:"Gold", oil:"Oil", steel:"Steel", nonferrous:"Non‑ferrous" },
-        sortBy: "Sort:",
-        sort: { featured:"Featured", priceAsc:"Price: Low → High", priceDesc:"Price: High → Low", nameAsc:"Name A–Z" },
-        unit: { t_oz:"troy oz", bbl:"barrel", ton:"tonne" },
-        card: {
-          grade:"Grade",
-          spec:"Spec",
-          origin:"Origin/Standard",
-          lot:"Lot Size",
-          moq:"MOQ",
-          incoterms:"Incoterms",
-          indicative:"Indicative",
-          updated:"Updated",
-          details:"Details",
-          rfq:"Request Quote"
-        },
-        rfq: {
-          title:"Request for Quote",
-          prod:"Product",
-          qty:"Quantity",
-          unit:"Unit",
-          incoterm:"Incoterm",
-          port:"Destination/Delivery",
-          company:"Company",
-          contact:"Contact",
-          email:"Email",
-          phone:"Phone",
-          note:"Notes",
-          cancel:"Cancel",
-          submit:"Submit",
-          success:"RFQ submitted (demo). We'll get back to you shortly."
-        },
-        disclaimer:"* All prices are indicative for demo only. FX rate is a sample value (wire it to your backend to auto‑update)."
+        brand:"Crypto Market Top 100",
+        search_placeholder:"Search coins…",
+        marketOverview:"Market Overview",
+        refresh:"Refresh",
+        gcap:"Global Mkt Cap",
+        gdelta:"24h Change",
+        btcdom:"BTC Dominance",
+        apiKeyLabel:"CoinGecko API Key",
+        apiHelp:"Demo key works too (lower rate limit). Fallback data without key is attempted.",
+        openKey:"Set / Change Key",
+        col:{coin:"Coin", price:"Price(USD)", mcap:"Mkt Cap", d24:"24h", d7:"7d", vol:"Volume(24h)", act:"Action"},
+        connect:"Connect Wallet",
+        wallet:{title:"Connect Wallet", detected:"Detected Wallets", useMM:"Use MetaMask", useMock:"Use Mock Address", mockNote:"For dev only. No real on‑chain tx.", addr:"Current Address"},
+        settings:{title:"Settings", keyHelper:"Header usage recommended; query param also supported. Saved locally for demo.", langLabel:"Language", save:"Save", clearKey:"Clear Key"},
+        open:"Details",
+        disclaimer:"* Primary source: CoinGecko (requires API key). Falls back to CoinCap basics/icons if needed. In production, proxy keys via your backend."
       }
     }
-    const t = (path) => path.split('.').reduce((o,k)=>o?.[k], i18n[state.lang]) ?? path;
-    const unitLabel = key => i18n[state.lang].unit[key] || key;
-
-    /* ============ State ============ */
     const state = {
       lang: localStorage.getItem('lang') || 'zh',
-      ccy: localStorage.getItem('ccy') || 'CNY',
-      type: 'all',
-      search: '',
-      sort: 'featured',
-      fx: { USD: 1, CNY: 7.20 } // 示例汇率
+      sort: 'mcap',
+      apiKey: localStorage.getItem('cg_api_key') || '',
+      cacheTTL: 60_000, // 60s markets cache
+      globalTTL: 10*60_000, // 10m global cache
+      wallet: localStorage.getItem('wallet_addr') || ''
     };
+    const t = (path) => path.split('.').reduce((o,k)=>o?.[k], i18n[state.lang]) ?? path;
     document.documentElement.lang = state.lang;
 
-    /* ============ Data (示例) ============ */
-    // 价格为“示意 USD/单位”，仅用于 UI 联调演示
-    const products = [
-      // GOLD
-      {
-        id:'xau-spot', type:'gold',
-        name:{zh:'黄金（现货 XAU）', en:'Gold (Spot XAU)'},
-        desc:{zh:'伦敦金现货，LBMA 合格交割', en:'London spot gold, LBMA good delivery'},
-        badge:{zh:'黄金', en:'GOLD'},
-        unit:'t_oz', indicativeUSD: 2400,
-        grade:{zh:'Au ≥ 99.5%（合格交割）', en:'Au ≥ 99.5% (Good Delivery)'},
-        spec:{zh:'按金衡盎司计价', en:'Priced per troy ounce'},
-        origin:{zh:'全球', en:'Global'},
-        lot:{zh:'1,000 盎司', en:'1,000 oz'},
-        moq:{zh:'500 盎司', en:'500 oz'},
-        updated:'2025-08-10'
+    /* ========= DOM ========= */
+    const $ = sel => document.querySelector(sel);
+    const els = {
+      brand: $('#i-brand'),
+      search: $('#searchInput'),
+      clear: $('#clearSearch'),
+      langSwitch: $('#langSwitch'),
+      sortSwitch: $('#sortSwitch'),
+      refresh: $('#refreshBtn'),
+      tbody: $('#tbody'),
+      gcap: $('#gcap'), gdelta: $('#gdelta'), btcdom: $('#btcdom'),
+      i:{ marketOverview: $('#i-marketOverview'), refresh: $('#i-refresh'), gcap: $('#i-gcap'), gdelta: $('#i-gdelta'), btcdom: $('#i-btcdom'),
+          apiKeyLabel: $('#i-apiKeyLabel'), apiHelp: $('#i-apiHelp'), openKey: $('#i-openKey'),
+          colCoin: $('#i-col-coin'), colPrice: $('#i-col-price'), colMcap: $('#i-col-mcap'), col24: $('#i-col-24h'), col7: $('#i-col-7d'), colVol: $('#i-col-vol'), colAct: $('#i-col-act'),
+          connect: $('#i-connect')
       },
-      // OIL
-      {
-        id:'wti-crude', type:'oil',
-        name:{zh:'原油（WTI）', en:'Crude Oil (WTI)'},
-        desc:{zh:'库欣交割，甜质轻质原油', en:'Cushing delivery, light sweet crude'},
-        badge:{zh:'石油', en:'OIL'},
-        unit:'bbl', indicativeUSD: 75,
-        grade:{zh:'API 39.6，硫含量0.24%', en:'API 39.6, Sulfur 0.24%'},
-        spec:{zh:'NYMEX 参考', en:'NYMEX reference'},
-        origin:{zh:'美国', en:'USA'},
-        lot:{zh:'1,000 桶/批', en:'1,000 bbl/lot'},
-        moq:{zh:'10,000 桶', en:'10,000 bbl'},
-        updated:'2025-07-22'
-      },
-      {
-        id:'brent-crude', type:'oil',
-        name:{zh:'原油（Brent）', en:'Crude Oil (Brent)'},
-        desc:{zh:'北海布伦特基准', en:'North Sea Brent benchmark'},
-        badge:{zh:'石油', en:'OIL'},
-        unit:'bbl', indicativeUSD: 78,
-        grade:{zh:'API 38-40，甜质', en:'API 38–40, sweet'},
-        spec:{zh:'ICE 参考', en:'ICE reference'},
-        origin:{zh:'北海', en:'North Sea'},
-        lot:{zh:'1,000 桶/批', en:'1,000 bbl/lot'},
-        moq:{zh:'10,000 桶', en:'10,000 bbl'},
-        updated:'2025-07-22'
-      },
-      // STEEL
-      {
-        id:'rebar-hrb400', type:'steel',
-        name:{zh:'螺纹钢 HRB400', en:'Steel Rebar HRB400'},
-        desc:{zh:'热轧带肋钢筋，建筑用', en:'Hot-rolled ribbed rebar'},
-        badge:{zh:'钢材', en:'STEEL'},
-        unit:'ton', indicativeUSD: 570,
-        grade:{zh:'HRB400，国标 GB 1499.2', en:'HRB400, GB 1499.2'},
-        spec:{zh:'Φ16mm（可选 12–32mm）', en:'Φ16mm (12–32mm optional)'},
-        origin:{zh:'中国', en:'China'},
-        lot:{zh:'25 吨/批', en:'25 t/lot'},
-        moq:{zh:'100 吨', en:'100 t'},
-        updated:'2025-07-02'
-      },
-      {
-        id:'hrc-1006', type:'steel',
-        name:{zh:'热轧卷 HRC SAE1006', en:'Hot Rolled Coil HRC SAE1006'},
-        desc:{zh:'低碳热轧卷板', en:'Low-carbon hot rolled coil'},
-        badge:{zh:'钢材', en:'STEEL'},
-        unit:'ton', indicativeUSD: 620,
-        grade:{zh:'SAE1006 / Q235B', en:'SAE1006 / Q235B'},
-        spec:{zh:'2.0–3.0mm × 1250mm', en:'2.0–3.0mm × 1250mm'},
-        origin:{zh:'东南亚/中国', en:'SEA/China'},
-        lot:{zh:'25 吨/卷', en:'25 t/coil'},
-        moq:{zh:'200 吨', en:'200 t'},
-        updated:'2025-06-18'
-      },
-      {
-        id:'billet-150x150', type:'steel',
-        name:{zh:'方坯 150×150', en:'Steel Billet 150×150'},
-        desc:{zh:'连铸方坯', en:'Continuous casting billet'},
-        badge:{zh:'钢材', en:'STEEL'},
-        unit:'ton', indicativeUSD: 530,
-        grade:{zh:'Q235 / 3SP', en:'Q235 / 3SP'},
-        spec:{zh:'150×150×6–9m', en:'150×150×6–9m'},
-        origin:{zh:'中东/亚洲', en:'MENA/Asia'},
-        lot:{zh:'300 吨/船', en:'300 t/parcel'},
-        moq:{zh:'1,000 吨', en:'1,000 t'},
-        updated:'2025-05-29'
-      },
-      // NON-FERROUS (示例“等”)
-      {
-        id:'copper-gradeA', type:'nonferrous',
-        name:{zh:'电解铜 Grade A', en:'Copper Cathode Grade A'},
-        desc:{zh:'LME 可交割', en:'LME deliverable'},
-        badge:{zh:'有色', en:'NON‑FERROUS'},
-        unit:'ton', indicativeUSD: 8800,
-        grade:{zh:'Cu ≥ 99.9935%', en:'Cu ≥ 99.9935%'},
-        spec:{zh:'1×1m，厚度8–10mm', en:'1×1m, 8–10mm'},
-        origin:{zh:'智利/刚果等', en:'CL/DRC etc.'},
-        lot:{zh:'20 吨/柜', en:'20 t/container'},
-        moq:{zh:'100 吨', en:'100 t'},
-        updated:'2025-07-30'
-      },
-      {
-        id:'alum-a7', type:'nonferrous',
-        name:{zh:'铝锭 A7', en:'Aluminum Ingot A7'},
-        desc:{zh:'P1020A 参考', en:'P1020A reference'},
-        badge:{zh:'有色', en:'NON‑FERROUS'},
-        unit:'ton', indicativeUSD: 2500,
-        grade:{zh:'Al ≥ 99.7%', en:'Al ≥ 99.7%'},
-        spec:{zh:'约 22.5kg/锭', en:'≈22.5kg/ingot'},
-        origin:{zh:'中东/东南亚', en:'MENA/SEA'},
-        lot:{zh:'25 吨/批', en:'25 t/lot'},
-        moq:{zh:'100 吨', en:'100 t'},
-        updated:'2025-06-08'
-      }
-    ];
+      apiKeyState: $('#apiKeyState'), openKey: $('#openKey'),
+      settingsBtn: $('#settingsBtn'), settingsModal: $('#settingsModal'), settingsClose: $('#settingsClose'),
+      settingsForm: $('#settingsForm'), apiKeyInput: $('#apiKeyInput'), localeSelect: $('#localeSelect'),
+      btnClearKey: $('#btnClearKey'), btnSaveSettings: $('#btnSaveSettings'),
+      disclaimer: $('#i-disclaimer'),
 
-    /* ============ DOM refs ============ */
-    const el = {
-      brand: document.getElementById('i-brand'),
-      search: document.getElementById('searchInput'),
-      clear: document.getElementById('clearSearch'),
-      langSwitch: document.getElementById('langSwitch'),
-      ccySwitch: document.getElementById('ccySwitch'),
-      typeFilters: document.getElementById('typeFilters'),
-      sort: document.getElementById('sortSelect'),
-      grid: document.getElementById('productGrid'),
-      disclaimer: document.getElementById('i-disclaimer'),
-      sortBy: document.getElementById('i-sortBy'),
-      rfqModal: document.getElementById('rfqModal'),
-      rfqClose: document.getElementById('rfqClose'),
-      rfqCancel: document.getElementById('rfqCancel'),
-      rfqForm: document.getElementById('rfqForm'),
-      rfqTitle: document.getElementById('rfqTitle'),
-      rfqProductId: document.getElementById('rfqProductId'),
-      rfqProductName: document.getElementById('rfqProductName'),
-      rfqQty: document.getElementById('rfqQty'),
-      rfqUnit: document.getElementById('rfqUnit'),
-      rfqIncoterm: document.getElementById('rfqIncoterm'),
-      rfqPort: document.getElementById('rfqPort'),
-      rfqCompany: document.getElementById('rfqCompany'),
-      rfqContact: document.getElementById('rfqContact'),
-      rfqEmail: document.getElementById('rfqEmail'),
-      rfqPhone: document.getElementById('rfqPhone'),
-      rfqNote: document.getElementById('rfqNote'),
-      rfqProdLabel: document.getElementById('rfqProdLabel'),
-      rfqQtyLabel: document.getElementById('rfqQtyLabel'),
-      rfqIncotermLabel: document.getElementById('rfqIncotermLabel'),
-      rfqPortLabel: document.getElementById('rfqPortLabel'),
-      rfqCompanyLabel: document.getElementById('rfqCompanyLabel'),
-      rfqContactLabel: document.getElementById('rfqContactLabel'),
-      rfqEmailLabel: document.getElementById('rfqEmailLabel'),
-      rfqPhoneLabel: document.getElementById('rfqPhoneLabel'),
-      rfqNoteLabel: document.getElementById('rfqNoteLabel'),
-      rfqCancelBtn: document.getElementById('rfqCancel'),
-      rfqSubmitBtn: document.getElementById('rfqSubmit')
+      walletBtn: $('#walletBtn'), walletModal: $('#walletModal'), walletClose: $('#walletClose'),
+      btnMetaMask: $('#btnMetaMask'), btnMock: $('#btnMock'),
+      walletDetected: $('#walletDetectResult'), currAddr: $('#currentAddr'),
+      walletTitle: $('#walletTitle'), iWalletDetected: $('#i-walletDetected'), iUseMM: $('#i-useMetaMask'), iUseMock: $('#i-useMock'), iMockNote: $('#i-mockNote'), iWalletAddr: $('#i-walletAddr')
     };
 
-    /* ============ Helpers ============ */
+    /* ========= Utils ========= */
     const locale = () => state.lang === 'zh' ? 'zh-CN' : 'en-US';
-    const formatMoney = usd => {
-      const rate = state.ccy === 'USD' ? 1 : state.fx.CNY;
-      const amt = usd * rate;
-      return new Intl.NumberFormat(locale(), {style:'currency', currency:state.ccy}).format(amt);
+    const nf = (opts) => new Intl.NumberFormat(locale(), opts);
+    const fmtUSD = v => (v==null? '—' : nf({style:'currency', currency:'USD', maximumFractionDigits: v>100?0: v>1?2: 6}).format(v));
+    const fmtPct = v => (v==null? '—' : (v>=0? '+' : '') + nf({maximumFractionDigits:2}).format(v) + '%');
+    const shortNum = n => {
+      if(n==null) return '—';
+      const abs = Math.abs(n);
+      const units = [{k:1e12,s:'T'},{k:1e9,s:'B'},{k:1e6,s:'M'},{k:1e3,s:'K'}];
+      for(const u of units){ if(abs>=u.k) return (n/u.k).toFixed(abs>=10*u.k?1:2)+u.s; }
+      return nf({maximumFractionDigits:0}).format(n);
     };
-    const byType = t => state.type === 'all' ? true : t === state.type;
-    const searchMatch = p => {
-      if (!state.search) return true;
-      const kw = state.search.trim().toLowerCase();
-      const fields = [
-        p.name[state.lang], p.name.zh, p.name.en,
-        p.desc[state.lang], p.badge[state.lang], p.type
-      ].join(' ').toLowerCase();
-      return fields.includes(kw);
-    };
-    const sorters = {
-      featured: () => 0,
-      priceAsc: (a,b) => (a.indicativeUSD ?? 0) - (b.indicativeUSD ?? 0),
-      priceDesc: (a,b) => (b.indicativeUSD ?? 0) - (a.indicativeUSD ?? 0),
-      nameAsc: (a,b) => a.name[state.lang].localeCompare(b.name[state.lang])
-    };
+    const el = (html) => { const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; };
 
-    /* ============ Render ============ */
-    function renderUITexts(){
-      // Header & controls
-      el.brand.textContent = t('brand');
-      el.search.placeholder = t('search_placeholder');
-      // Filters text
-      document.getElementById('flt-all').textContent = t('filters.all');
-      document.getElementById('flt-gold').textContent = t('filters.gold');
-      document.getElementById('flt-oil').textContent  = t('filters.oil');
-      document.getElementById('flt-steel').textContent= t('filters.steel');
-      document.getElementById('flt-nonferrous').textContent= t('filters.nonferrous');
-      // Sort
-      el.sortBy.textContent = t('sortBy');
-      el.sort.options[0].textContent = t('sort.featured');
-      el.sort.options[1].textContent = t('sort.priceAsc');
-      el.sort.options[2].textContent = t('sort.priceDesc');
-      el.sort.options[3].textContent = t('sort.nameAsc');
-      // Footer
-      el.disclaimer.textContent = t('disclaimer');
-      // RFQ labels
-      el.rfqTitle.textContent = t('rfq.title');
-      el.rfqProdLabel.textContent = t('rfq.prod');
-      el.rfqQtyLabel.textContent = t('rfq.qty');
-      el.rfqIncotermLabel.textContent = t('rfq.incoterm');
-      el.rfqPortLabel.textContent = t('rfq.port');
-      el.rfqCompanyLabel.textContent = t('rfq.company');
-      el.rfqContactLabel.textContent = t('rfq.contact');
-      el.rfqEmailLabel.textContent = t('rfq.email');
-      el.rfqPhoneLabel.textContent = t('rfq.phone');
-      el.rfqNoteLabel.textContent = t('rfq.note');
-      el.rfqCancelBtn.textContent = t('rfq.cancel');
-      el.rfqSubmitBtn.textContent = t('rfq.submit');
-      document.querySelectorAll('.i-details').forEach(n=>n.textContent = t('card.details'));
-      document.querySelectorAll('.i-rfq').forEach(n=>n.textContent = t('card.rfq'));
+    /* ========= Fetch layer (with cache & fallback) ========= */
+    const withHeaders = (init={}) => {
+      const headers = new Headers(init.headers || {});
+      headers.set('accept','application/json');
+      if(state.apiKey) headers.set('x-cg-demo-api-key', state.apiKey); // Demo key header
+      return {...init, headers};
+    };
+    const cacheGet = (k, ttl) => {
+      try{
+        const it = JSON.parse(localStorage.getItem(k) || 'null');
+        if(!it) return null;
+        if(Date.now() - it.ts > ttl) return null;
+        return it.data;
+      }catch{ return null; }
+    };
+    const cacheSet = (k, data) => localStorage.setItem(k, JSON.stringify({ts:Date.now(), data}));
+
+    async function getMarkets(){
+      const CK = 'cg:markets';
+      const cached = cacheGet(CK, state.cacheTTL);
+      if(cached) return cached;
+      const qs = new URLSearchParams({
+        vs_currency:'usd', order:'market_cap_desc', per_page:'100', page:'1',
+        sparkline:'true', price_change_percentage:'24h,7d'
+      });
+      // also attach query param for demo key as redundancy
+      if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
+      const url = `https://api.coingecko.com/api/v3/coins/markets?`+qs.toString();
+      try{
+        const res = await fetch(url, withHeaders());
+        if(!res.ok) throw new Error('coingecko '+res.status);
+        const data = await res.json();
+        cacheSet(CK, data);
+        return data;
+      }catch(e){
+        console.warn('[fallback] CoinGecko failed:', e);
+        return await getMarketsFallback();
+      }
+    }
+    async function getGlobal(){
+      const CK = 'cg:global';
+      const cached = cacheGet(CK, state.globalTTL);
+      if(cached) return cached;
+      const qs = new URLSearchParams();
+      if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
+      try{
+        const res = await fetch(`https://api.coingecko.com/api/v3/global?${qs}`, withHeaders());
+        if(!res.ok) throw new Error('coingecko-global '+res.status);
+        const data = await res.json();
+        cacheSet(CK, data);
+        return data;
+      }catch(e){
+        console.warn('[fallback] global failed:', e);
+        return null;
+      }
+    }
+    // Fallback: CoinCap（基础字段 + 图标推断）
+    async function getMarketsFallback(){
+      try{
+        const res = await fetch('https://api.coincap.io/v2/assets?limit=100');
+        if(!res.ok) throw new Error('coincap '+res.status);
+        const { data } = await res.json();
+        return data.map((it, i) => ({
+          market_cap_rank: i+1,
+          id: it.id,
+          symbol: it.symbol?.toLowerCase(),
+          name: it.name,
+          image: `https://assets.coincap.io/assets/icons/${(it.symbol||'').toLowerCase()}@2x.png`,
+          current_price: Number(it.priceUsd),
+          market_cap: Number(it.marketCapUsd),
+          total_volume: Number(it.volumeUsd24Hr),
+          price_change_percentage_24h: Number(it.changePercent24Hr),
+          sparkline_in_7d: { price: [] }, // 无历史，保持字段兼容
+          price_change_percentage_7d_in_currency: null
+        }));
+      }catch(err){
+        console.error('Fallback failed:', err);
+        return [];
+      }
+    }
+
+    /* ========= Render ========= */
+    function applyTexts(){
+      els.brand.textContent = t('brand');
+      els.search.placeholder = t('search_placeholder');
+      els.i.marketOverview.textContent = t('marketOverview');
+      els.i.refresh.textContent = t('refresh');
+      els.i.gcap.textContent = t('gcap');
+      els.i.gdelta.textContent = t('gdelta');
+      els.i.btcdom.textContent = t('btcdom');
+      $('#i-apiKeyLabel').textContent = t('apiKeyLabel');
+      $('#i-apiHelp').textContent = t('apiHelp');
+      $('#i-openKey').textContent = t('openKey');
+      $('#i-col-coin').textContent = t('col.coin');
+      $('#i-col-price').textContent = t('col.price');
+      $('#i-col-mcap').textContent = t('col.mcap');
+      $('#i-col-24h').textContent = t('col.d24');
+      $('#i-col-7d').textContent = t('col.d7');
+      $('#i-col-vol').textContent = t('col.vol');
+      $('#i-col-act').textContent = t('col.act');
+      els.i.connect.textContent = t('connect');
+      $('#settingsTitle').textContent = t('settings.title');
+      $('#i-keyHelper').textContent = t('settings.keyHelper');
+      $('#i-langLabel').textContent = t('settings.langLabel');
+      els.btnSaveSettings.textContent = t('settings.save');
+      els.btnClearKey.textContent = t('settings.clearKey');
+      // wallet texts
+      $('#walletTitle').textContent = t('wallet.title');
+      $('#i-walletDetected').textContent = t('wallet.detected');
+      $('#i-useMetaMask').textContent = t('wallet.useMM');
+      $('#i-useMock').textContent = t('wallet.useMock');
+      $('#i-mockNote').textContent = t('wallet.mockNote');
+      $('#i-walletAddr').textContent = t('wallet.addr');
+      document.querySelectorAll('.i-open').forEach(n=>n.textContent = t('open'));
+      els.disclaimer.textContent = t('disclaimer');
       document.documentElement.lang = state.lang;
     }
 
-    function renderProducts(){
-      el.grid.innerHTML = '';
+    function renderGlobal(glob){
+      if(!glob?.data){ els.gcap.textContent='—'; els.gdelta.textContent='—'; els.btcdom.textContent='—'; return; }
+      const d = glob.data;
+      const cap = d.total_market_cap?.usd;
+      const delta = d.market_cap_change_percentage_24h_usd;
+      const btc = d.market_cap_percentage?.btc;
+      els.gcap.textContent = fmtUSD(cap);
+      els.gdelta.textContent = fmtPct(delta);
+      els.gdelta.className = 'v delta ' + (delta>=0?'up':'down');
+      els.btcdom.textContent = (btc!=null? nf({maximumFractionDigits:2}).format(btc) + '%' : '—');
+    }
+
+    function drawSpark(svg, prices){
+      const w = 120, h = 36, pad=2;
+      svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+      svg.innerHTML = '';
+      if(!prices || prices.length<2) return;
+      const min = Math.min(...prices), max = Math.max(...prices);
+      const xs = prices.map((_,i)=> pad + (i*(w-2*pad)/(prices.length-1)));
+      const ys = prices.map(v => {
+        if(max===min) return h/2;
+        return pad + (h-2*pad) - ( (v-min)/(max-min) * (h-2*pad) );
+      });
+      const d = xs.map((x,i)=> `${i?'L':'M'}${x.toFixed(2)},${ys[i].toFixed(2)}`).join(' ');
+      const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d', d);
+      path.setAttribute('fill','none'); path.setAttribute('stroke','currentColor'); path.setAttribute('stroke-width','1.5');
+      svg.appendChild(path);
+    }
+
+    function renderRows(data){
+      els.tbody.innerHTML = '';
+      const tpl = document.getElementById('row');
       const frag = document.createDocumentFragment();
-      const data = products
-        .filter(p => byType(p.type))
-        .filter(searchMatch)
-        .slice()
-        .sort(sorters[state.sort]);
-
-      const tpl = document.getElementById('card');
-      data.forEach(p=>{
+      data.forEach((p,idx)=>{
         const node = tpl.content.cloneNode(true);
-        node.querySelector('.badge').textContent = p.badge[state.lang];
-        node.querySelector('.title').textContent = p.name[state.lang];
-        node.querySelector('.desc').textContent = p.desc[state.lang];
-        const meta = node.querySelector('.meta');
-        meta.append(tag(`${t('card.grade')}: ${p.grade[state.lang]}`));
-        meta.append(tag(`${t('card.spec')}: ${p.spec[state.lang]}`));
-        meta.append(tag(`${t('card.origin')}: ${p.origin[state.lang]}`));
-        meta.append(tag(`${t('card.lot')}: ${p.lot[state.lang]}`));
-        meta.append(tag(`${t('card.moq')}: ${p.moq[state.lang]}`));
-        meta.append(tag(`${t('card.incoterms')}: FOB/CIF/CFR/EXW/DAP`));
+        node.querySelector('.rank').textContent = p.market_cap_rank ?? (idx+1);
+        const img = node.querySelector('img');
+        img.src = p.image || `https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`;
+        img.alt = `${p.name} logo`;
+        node.querySelector('.name').textContent = p.name;
+        node.querySelector('.sym').textContent = (p.symbol || '').toUpperCase();
 
-        const price = node.querySelector('.price');
-        price.querySelector('.num').textContent = p.indicativeUSD ? formatMoney(p.indicativeUSD) : '—';
-        price.querySelector('.unit').textContent = `/ ${unitLabel(p.unit)} • ${t('card.indicative')} • ${t('card.updated')} ${p.updated}`;
+        node.querySelector('.price').textContent = fmtUSD(p.current_price);
+        node.querySelector('.mcap').textContent = '$'+ shortNum(p.market_cap);
+        const c24 = p.price_change_percentage_24h;
+        const el24 = node.querySelector('.chg24'); el24.textContent = fmtPct(c24); el24.classList.add(c24>=0?'up':'down');
 
-        // actions
-        node.querySelector('[data-role="details"]').addEventListener('click',()=>showToast(
-          p.name[state.lang] + ' — ' + p.desc[state.lang]
-        ));
-        node.querySelector('[data-role="rfq"]').addEventListener('click',()=>openRFQ(p));
+        // 7d pct（在 markets 接口 price_change_percentage=7d 时可从扩展字段读取；不同库字段名可能不同）
+        const c7 = p.price_change_percentage_7d_in_currency ?? p.price_change_percentage_7d ?? null;
+        const el7 = node.querySelector('.chg7'); el7.textContent = c7==null? '—' : fmtPct(c7); el7.classList.add(c7>=0?'up':'down');
+
+        // sparkline
+        const prices = p.sparkline_in_7d?.price;
+        drawSpark(node.querySelector('.spark'), prices);
+
+        node.querySelector('.vol').textContent = '$'+ shortNum(p.total_volume);
+
+        // action: link to CoinGecko coin page
+        const loc = state.lang==='zh' ? 'zh' : 'en';
+        node.querySelector('[data-role="open"]').href = `https://www.coingecko.com/${loc}/coins/${p.id}`;
 
         frag.appendChild(node);
       });
-      el.grid.appendChild(frag);
-      renderUITexts();
+      els.tbody.appendChild(frag);
     }
-    const tag = txt => { const s=document.createElement('span'); s.className='tag'; s.textContent=txt; return s; };
 
-    /* ============ RFQ ============ */
-    function openRFQ(p){
-      el.rfqProductId.value = p.id;
-      el.rfqProductName.value = p.name[state.lang];
-      el.rfqQty.value = '';
-      el.rfqUnit.textContent = unitLabel(p.unit);
-      el.rfqModal.classList.remove('hidden');
-      el.rfqModal.setAttribute('aria-hidden','false');
-      el.rfqQty.focus();
+    /* ========= Filters & sort ========= */
+    function bySearch(kw){
+      if(!kw) return () => true;
+      kw = kw.trim().toLowerCase();
+      return p => (p.name?.toLowerCase().includes(kw) || p.symbol?.toLowerCase().includes(kw));
     }
-    function closeRFQ(){
-      el.rfqModal.classList.add('hidden');
-      el.rfqModal.setAttribute('aria-hidden','true');
+    const sorters = {
+      mcap: (a,b) => (b.market_cap??0)-(a.market_cap??0),
+      price: (a,b) => (b.current_price??0)-(a.current_price??0),
+      change24h: (a,b) => (b.price_change_percentage_24h??-1e9)-(a.price_change_percentage_24h??-1e9)
+    };
+
+    /* ========= Wallet mock ========= */
+    function updateWalletUI(){
+      els.walletBtn.querySelector('span').textContent = state.wallet ? (state.wallet.slice(0,6)+'…'+state.wallet.slice(-4)) : t('connect');
+      els.currAddr.value = state.wallet || '';
     }
-    el.rfqClose.addEventListener('click', closeRFQ);
-    el.rfqCancel.addEventListener('click', closeRFQ);
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeRFQ(); });
+    async function tryMetaMask(){
+      const eth = window.ethereum;
+      if(!eth){ alert(state.lang==='zh'?'未检测到 MetaMask 或 EIP‑1193 钱包。':'No MetaMask / EIP‑1193 wallet detected.'); return; }
+      try{
+        const accts = await eth.request({ method:'eth_requestAccounts' });
+        const addr = (accts && accts[0]) || '';
+        if(addr){
+          state.wallet = addr; localStorage.setItem('wallet_addr', addr);
+          updateWalletUI(); closeWallet();
+          // === 预留：真实业务接入点 ===
+          // fetch('/api/wallet/connect', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ address: addr, ts: Date.now() }) })
+          console.log('[RFQ wallet] connected:', addr);
+        }
+      }catch(err){ console.warn('MetaMask rejected/failed', err); }
+    }
+    function mockAddress(){
+      const hex = Array.from(crypto.getRandomValues(new Uint8Array(20))).map(b=>b.toString(16).padStart(2,'0')).join('');
+      const addr = '0x'+hex;
+      state.wallet = addr; localStorage.setItem('wallet_addr', addr);
+      updateWalletUI(); closeWallet();
+      console.log('[RFQ wallet MOCK] connected:', addr);
+    }
 
-    el.rfqForm.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      // 简单校验
-      const required = [el.rfqQty, el.rfqPort, el.rfqCompany, el.rfqContact, el.rfqEmail];
-      let ok = true;
-      required.forEach(input=>{
-        if(!input.value?.trim()){ input.focus(); ok=false; }
-      });
-      if(!ok) return;
+    /* ========= Modals ========= */
+    function open(el){ el.classList.remove('hidden'); el.setAttribute('aria-hidden','false'); }
+    function close(el){ el.classList.add('hidden'); el.setAttribute('aria-hidden','true'); }
+    function openWallet(){ open(els.walletModal); els.walletDetected.textContent = window.ethereum ? 'MetaMask (EIP‑1193) 可用' : '未检测到浏览器钱包'; }
+    function closeWallet(){ close(els.walletModal); }
+    function openSettings(){ els.apiKeyInput.value = state.apiKey; els.localeSelect.value = state.lang; open(els.settingsModal); }
+    function closeSettings(){ close(els.settingsModal); }
 
-      const payload = {
-        productId: el.rfqProductId.value,
-        productName: el.rfqProductName.value,
-        qty: el.rfqQty.value,
-        unit: el.rfqUnit.textContent,
-        incoterm: el.rfqIncoterm.value,
-        port: el.rfqPort.value,
-        company: el.rfqCompany.value,
-        contact: el.rfqContact.value,
-        email: el.rfqEmail.value,
-        phone: el.rfqPhone.value,
-        note: el.rfqNote.value,
-        lang: state.lang,
-        currency: state.ccy
-      };
-      // 这里接入你的后端：fetch('/api/rfq', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)})
-      console.log('RFQ payload (demo):', payload);
-
-      showToast(t('rfq.success'));
-      closeRFQ();
-      e.target.reset();
-    });
-
-    /* ============ Events ============ */
-    // 搜索
-    el.search.addEventListener('input', ()=>{ state.search = el.search.value; renderProducts(); });
-    el.clear.addEventListener('click', ()=>{ el.search.value = ''; state.search=''; renderProducts(); });
-
-    // 过滤
-    el.typeFilters.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-type]');
-      if(!btn) return;
-      [...el.typeFilters.querySelectorAll('.chip')].forEach(b=>b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      state.type = btn.dataset.type;
-      renderProducts();
-    });
-
-    // 排序
-    el.sort.addEventListener('change', ()=>{ state.sort = el.sort.value; renderProducts(); });
-
-    // 语言切换
-    el.langSwitch.addEventListener('click', (e)=>{
+    /* ========= Events ========= */
+    els.langSwitch.addEventListener('click', (e)=>{
       const btn = e.target.closest('button[data-lang]'); if(!btn) return;
-      [...el.langSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
-      state.lang = btn.dataset.lang; localStorage.setItem('lang', state.lang);
-      renderProducts();
+      [...els.langSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
+      state.lang = btn.dataset.lang; localStorage.setItem('lang', state.lang); applyTexts(); render(); 
     });
-
-    // 货币切换
-    el.ccySwitch.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-ccy]'); if(!btn) return;
-      [...el.ccySwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
-      state.ccy = btn.dataset.ccy; localStorage.setItem('ccy', state.ccy);
-      renderProducts();
+    els.sortSwitch.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-sort]'); if(!btn) return;
+      [...els.sortSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
+      state.sort = btn.dataset.sort; render();
     });
+    els.search.addEventListener('input', render);
+    els.clear.addEventListener('click', ()=>{ els.search.value=''; render(); });
+    els.refresh.addEventListener('click', async()=>{ localStorage.removeItem('cg:markets'); await render(true); });
 
-    /* ============ Toast ============ */
-    let toastTimer;
-    function showToast(msg){
-      clearTimeout(toastTimer);
-      const tdiv = document.createElement('div');
-      tdiv.className = 'toast';
-      tdiv.textContent = msg;
-      document.body.appendChild(tdiv);
-      toastTimer = setTimeout(()=> tdiv.remove(), 3000);
+    // settings
+    els.settingsBtn.addEventListener('click', openSettings); els.openKey.addEventListener('click', openSettings);
+    els.settingsClose.addEventListener('click', closeSettings);
+    els.settingsForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      state.apiKey = els.apiKeyInput.value.trim(); localStorage.setItem('cg_api_key', state.apiKey);
+      state.lang = els.localeSelect.value; localStorage.setItem('lang', state.lang);
+      els.apiKeyState.textContent = state.apiKey ? '已设置' : '未设置';
+      applyTexts(); closeSettings(); render(true);
+    });
+    els.btnClearKey.addEventListener('click', ()=>{ state.apiKey=''; localStorage.removeItem('cg_api_key'); els.apiKeyState.textContent='未设置'; });
+
+    // wallet
+    els.walletBtn.addEventListener('click', openWallet); els.walletClose.addEventListener('click', closeWallet);
+    els.btnMetaMask.addEventListener('click', tryMetaMask); els.btnMock.addEventListener('click', mockAddress);
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeWallet(); closeSettings(); } });
+
+    /* ========= Main render ========= */
+    async function render(force=false){
+      applyTexts();
+      els.apiKeyState.textContent = state.apiKey ? (state.lang==='zh'?'已设置':'Set') : (state.lang==='zh'?'未设置':'Not set');
+      updateWalletUI();
+      if(force){ localStorage.removeItem('cg:markets'); }
+      const [glob, marketsRaw] = await Promise.all([getGlobal(), getMarkets()]);
+      renderGlobal(glob);
+      // filter/sort
+      const kw = els.search.value;
+      const data = marketsRaw.filter(bySearch(kw)).sort(sorters[state.sort]);
+      renderRows(data);
     }
 
-    /* ============ Init ============ */
-    // 初始化语言/货币状态 UI
-    ;[...el.langSwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.lang === state.lang));
-    ;[...el.ccySwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.ccy === state.ccy));
-    el.search.placeholder = t('search_placeholder');
-    renderProducts();
+    // init
+    ;[...els.langSwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.lang === state.lang));
+    els.apiKeyState.textContent = state.apiKey ? '已设置' : '未设置';
+    render();
   })();
   </script>
 </body>
