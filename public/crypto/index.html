@@ -15,7 +15,7 @@
       --card: color-mix(in srgb, white 86%, transparent);
       --text: #0f172a; --muted:#475569; --border: rgba(15,23,42,.08);
       --brand:#2563eb; --ok:#16a34a; --down:#ef4444; --warn:#f59e0b;
-      --shadow: 0 12px 36px rgba(15,23,42,.10);
+      --shadow: 0 10px 28px rgba(15,23,42,.10);
       --radius: 14px; --focus: 0 0 0 3px color-mix(in srgb, var(--brand) 30%, transparent);
       --chip: rgba(15,23,42,.05);
     }
@@ -24,7 +24,7 @@
         --bg: linear-gradient(180deg,#0b1220,#0d1117);
         --panel: rgba(17,24,39,.5); --card: rgba(17,24,39,.65);
         --text: #e5e7eb; --muted:#94a3b8; --border: rgba(148,163,184,.2);
-        --shadow: 0 12px 36px rgba(0,0,0,.35);
+        --shadow: 0 8px 26px rgba(0,0,0,.35);
         --chip: rgba(255,255,255,.06);
       }
     }
@@ -33,34 +33,47 @@
     body{margin:0; color:var(--text); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", "PingFang SC","Noto Sans", Arial, sans-serif; background: var(--bg) fixed}
     a{color:inherit; text-decoration:none}
     .container{max-width:1200px; margin:0 auto; padding:20px}
+    @media (max-width:1280px){ .container{padding-inline:16px} }
+    @media (max-width:480px){ body{font-size:15px} }
 
     /* ===== Header / toolbar ===== */
     .app-header{position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(10px); background:var(--panel); border-bottom:1px solid var(--border)}
-    .toolbar{display:flex; gap:16px; align-items:center; justify-content:space-between}
-    .brand{display:flex; align-items:center; gap:12px; padding:10px 0; font-weight:800; letter-spacing:.2px}
-    .badge{display:inline-grid; place-items:center; width:36px; height:36px; border-radius:9px; background:linear-gradient(135deg,#2563eb 0%,#8b5cf6 100%); color:#fff}
-    .search{flex:1; display:flex; align-items:center; gap:8px; max-width:520px; background:var(--card); padding:10px 12px; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow)}
-    .search input{flex:1; border:0; outline:0; background:transparent; font-size:15px; color:inherit}
-    .icon-btn{border:0; background:transparent; cursor:pointer; padding:8px; border-radius:10px}
+    .toolbar{display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:nowrap}
+    .brand{display:flex; align-items:center; gap:10px; padding:10px 0; font-weight:800; letter-spacing:.2px; min-width:0}
+    .badge{display:inline-grid; place-items:center; width:36px; height:36px; border-radius:9px; background:linear-gradient(135deg,#2563eb 0%,#8b5cf6 100%); color:#fff; flex:0 0 auto}
+    .brand span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:38vw}
+    .search{flex:1; display:flex; align-items:center; gap:8px; min-width:160px; max-width:520px; background:var(--card); padding:10px 12px; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow)}
+    .search input{flex:1; border:0; outline:0; background:transparent; font-size:15px; color:inherit; min-width:60px}
+    .icon-btn{border:0; background:transparent; cursor:pointer; padding:10px; border-radius:10px; touch-action:manipulation}
     .icon-btn:hover{background:rgba(0,0,0,.06)}
     .chip-group{display:flex; gap:6px; background:var(--chip); padding:5px; border-radius:999px}
-    .chip{border:0; cursor:pointer; padding:8px 12px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700}
+    .chip{border:0; cursor:pointer; padding:10px 12px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700; touch-action:manipulation}
     .chip.is-active{background:#0f172a; color:#fff; box-shadow:0 6px 20px rgba(16,24,40,.18)}
     @media (prefers-color-scheme: dark){ .chip.is-active{background:#e2e8f0; color:#111827} }
 
+    /* Mobile toolbar wrapping */
+    @media (max-width:720px){
+      .toolbar{flex-wrap:wrap}
+      .brand{order:1; flex:1 1 auto}
+      .search{order:3; width:100%}
+      .toolbar > .actions-bar{order:2; display:flex; gap:10px; align-items:center}
+      #walletBtn{padding:10px 12px}
+    }
+
     /* ===== Hero / global stats ===== */
-    .hero{margin:18px 0 12px; display:grid; gap:14px; grid-template-columns: 1.3fr 1fr}
+    .hero{margin:14px 0 10px; display:grid; gap:14px; grid-template-columns: 1.3fr 1fr}
     .panel{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
     .stats{display:grid; gap:10px; grid-template-columns: repeat(3,1fr)}
     .stat{display:flex; flex-direction:column; gap:2px}
     .stat .k{font-size:13px; color:var(--muted)}
     .stat .v{font-size:20px; font-weight:900}
     .delta.up{color:var(--ok)} .delta.down{color:var(--down)}
-    .settings{display:flex; gap:10px; align-items:center; justify-content:flex-end}
+    @media (max-width:920px){ .hero{grid-template-columns:1fr} }
+    @media (max-width:600px){ .stats{grid-template-columns:1fr 1fr} .stat .v{font-size:18px} }
 
-    /* ===== Table ===== */
+    /* ===== Table (desktop / tablet) ===== */
     .table{margin-top:12px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:auto}
-    table{width:100%; border-collapse:separate; border-spacing:0}
+    table{width:100%; border-collapse:separate; border-spacing:0; min-width:780px}
     thead th{position:sticky; top:0; background:color-mix(in srgb, var(--card) 90%, transparent); backdrop-filter:blur(6px); font-size:12px; color:var(--muted); text-align:left; padding:10px; border-bottom:1px solid var(--border)}
     tbody td{padding:12px 10px; border-bottom:1px solid var(--border); vertical-align:middle}
     tbody tr:hover{background:rgba(0,0,0,.03)}
@@ -72,11 +85,35 @@
     .chg.up{color:var(--ok)} .chg.down{color:var(--down)}
     .spark{width:120px; height:36px}
     .actions{display:flex; gap:8px}
-    .btn{display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; background:#fff; font-weight:700; cursor:pointer}
+    .btn{display:inline-flex; align-items:center; gap:6px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#fff; font-weight:700; cursor:pointer; touch-action:manipulation}
     .btn.primary{background:var(--brand); color:#fff; border-color:transparent}
     @media (prefers-color-scheme: dark){ .btn{background:#0b1220; color:#e5e7eb} }
 
-    /* ===== Modal ===== */
+    /* ===== Mobile Cards (<=768px) ===== */
+    .cards{display:none}
+    @media (max-width:768px){
+      .table{display:none}
+      .cards{display:grid; gap:12px}
+      .item{display:flex; flex-direction:column; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:12px}
+      .row1{display:flex; align-items:center; gap:10px; justify-content:space-between}
+      .left{display:flex; align-items:center; gap:10px; min-width:0}
+      .rank-badge{font-variant-numeric:tabular-nums; font-weight:800; width:28px; text-align:right}
+      .coin img{width:26px; height:26px}
+      .name{font-weight:800; max-width:44vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+      .sym{font-size:12px}
+      .price{font-weight:900}
+      .row2{display:grid; grid-template-columns: repeat(4, auto); gap:10px; align-items:center; font-size:13px}
+      .kv{display:flex; flex-direction:column; gap:2px}
+      .kv .k{color:var(--muted); font-size:12px}
+      .spark{width:100%; height:34px}
+      .actions{margin-top:6px}
+      @media (max-width:420px){
+        .row2{grid-template-columns: repeat(2, 1fr)}
+        .spark{display:none}
+      }
+    }
+
+    /* ===== Modals ===== */
     .modal{position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; padding:22px}
     .hidden{display:none}
     .modal-card{width:min(680px,100%); background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.35); overflow:hidden}
@@ -86,10 +123,12 @@
     label{font-size:13px; color:var(--muted)}
     input, select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:transparent; color:inherit}
     input:focus, select:focus{outline:none; box-shadow:var(--focus)}
-    .helper{color:var(--muted); font-size:12px}
 
     footer{color:#94a3b8; font-size:12px; text-align:center; margin:18px 0}
-    @media (max-width:920px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr 1fr} .spark{display:none} }
+    /* Motion reduce */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none !important; transition:none !important}
+    }
   </style>
 </head>
 <body>
@@ -102,12 +141,12 @@
       </div>
 
       <div class="search" role="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23A6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0s.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        <input id="searchInput" type="search" placeholder="搜索币种 / Search…" aria-label="Search coins">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23A6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l 4.25 4.25c.41.41 1.08.41 1.49 0s.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input id="searchInput" type="search" placeholder="搜索币种 / Search…" aria-label="Search coins" inputmode="search" />
         <button id="clearSearch" class="icon-btn" title="Clear" aria-label="Clear search">✕</button>
       </div>
 
-      <div style="display:flex; align-items:center; gap:12px">
+      <div class="actions-bar" style="display:flex; align-items:center; gap:10px">
         <div class="chip-group" id="langSwitch" role="tablist" aria-label="Language">
           <button class="chip is-active" role="tab" data-lang="zh">中文</button>
           <button class="chip" role="tab" data-lang="en">EN</button>
@@ -122,9 +161,9 @@
   <div class="container">
     <section class="hero">
       <div class="panel">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap">
           <h2 style="margin:0" id="i-marketOverview">市场概览</h2>
-          <div class="actions">
+          <div class="actions" style="display:flex; gap:8px; flex-wrap:wrap">
             <button class="btn" id="refreshBtn">⟲ <span id="i-refresh">刷新</span></button>
             <div class="chip-group" id="sortSwitch" aria-label="Sort">
               <button class="chip is-active" data-sort="mcap">MC</button>
@@ -135,7 +174,7 @@
         </div>
         <div class="stats" style="margin-top:10px">
           <div class="stat"><div class="k" id="i-gcap">全球总市值</div><div class="v" id="gcap">—</div></div>
-          <div class="stat"><div class="k" id="i-gdelta">24小时变动</div><div class="v" id="gdelta" class="delta">—</div></div>
+          <div class="stat"><div class="k" id="i-gdelta">24小时变动</div><div class="v delta" id="gdelta">—</div></div>
           <div class="stat"><div class="k" id="i-btcdom">BTC 占比</div><div class="v" id="btcdom">—</div></div>
         </div>
       </div>
@@ -153,8 +192,8 @@
       </div>
     </section>
 
-    <!-- Table -->
-    <section class="table" aria-label="Top 100 cryptocurrencies">
+    <!-- Desktop/Table -->
+    <section class="table" aria-label="Top 100 cryptocurrencies (table)">
       <table>
         <thead>
           <tr>
@@ -170,6 +209,11 @@
         </thead>
         <tbody id="tbody"></tbody>
       </table>
+    </section>
+
+    <!-- Mobile/Cards -->
+    <section class="cards" aria-label="Top 100 cryptocurrencies (cards)">
+      <div id="cardList" role="list"></div>
     </section>
 
     <footer id="i-disclaimer">
@@ -264,6 +308,34 @@
     </tr>
   </template>
 
+  <template id="cardItem">
+    <article class="item" role="listitem">
+      <div class="row1">
+        <div class="left">
+          <div class="rank-badge">#<span class="rank">1</span></div>
+          <div class="coin">
+            <img alt="logo" loading="lazy" referrerpolicy="no-referrer" />
+            <div>
+              <div class="name">Bitcoin</div>
+              <div class="sym">BTC</div>
+            </div>
+          </div>
+        </div>
+        <div class="price">$—</div>
+      </div>
+      <div class="row2">
+        <div class="kv"><div class="k">24h</div><div class="v chg chg24">—</div></div>
+        <div class="kv"><div class="k">7d</div><div class="v chg chg7">—</div></div>
+        <div class="kv"><div class="k">MCap</div><div class="v mcap">$—</div></div>
+        <div class="kv"><div class="k">Vol</div><div class="v vol">$—</div></div>
+      </div>
+      <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="actions">
+        <a class="btn" target="_blank" rel="noopener" data-role="open">🔎 <span class="i-open">详情</span></a>
+      </div>
+    </article>
+  </template>
+
   <script>
   ;(() => {
     /* ========= i18n ========= */
@@ -309,8 +381,8 @@
       lang: localStorage.getItem('lang') || 'zh',
       sort: 'mcap',
       apiKey: localStorage.getItem('cg_api_key') || '',
-      cacheTTL: 60_000, // 60s markets cache
-      globalTTL: 10*60_000, // 10m global cache
+      cacheTTL: 60_000,
+      globalTTL: 10*60_000,
       wallet: localStorage.getItem('wallet_addr') || ''
     };
     const t = (path) => path.split('.').reduce((o,k)=>o?.[k], i18n[state.lang]) ?? path;
@@ -326,6 +398,7 @@
       sortSwitch: $('#sortSwitch'),
       refresh: $('#refreshBtn'),
       tbody: $('#tbody'),
+      cardList: $('#cardList'),
       gcap: $('#gcap'), gdelta: $('#gdelta'), btcdom: $('#btcdom'),
       i:{ marketOverview: $('#i-marketOverview'), refresh: $('#i-refresh'), gcap: $('#i-gcap'), gdelta: $('#i-gdelta'), btcdom: $('#i-btcdom'),
           apiKeyLabel: $('#i-apiKeyLabel'), apiHelp: $('#i-apiHelp'), openKey: $('#i-openKey'),
@@ -362,7 +435,7 @@
     const withHeaders = (init={}) => {
       const headers = new Headers(init.headers || {});
       headers.set('accept','application/json');
-      if(state.apiKey) headers.set('x-cg-demo-api-key', state.apiKey); // Demo key header
+      if(state.apiKey) headers.set('x-cg-demo-api-key', state.apiKey);
       return {...init, headers};
     };
     const cacheGet = (k, ttl) => {
@@ -383,7 +456,6 @@
         vs_currency:'usd', order:'market_cap_desc', per_page:'100', page:'1',
         sparkline:'true', price_change_percentage:'24h,7d'
       });
-      // also attach query param for demo key as redundancy
       if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
       const url = `https://api.coingecko.com/api/v3/coins/markets?`+qs.toString();
       try{
@@ -430,7 +502,7 @@
           market_cap: Number(it.marketCapUsd),
           total_volume: Number(it.volumeUsd24Hr),
           price_change_percentage_24h: Number(it.changePercent24Hr),
-          sparkline_in_7d: { price: [] }, // 无历史，保持字段兼容
+          sparkline_in_7d: { price: [] },
           price_change_percentage_7d_in_currency: null
         }));
       }catch(err){
@@ -506,7 +578,8 @@
       svg.appendChild(path);
     }
 
-    function renderRows(data){
+    // === Table rows (desktop) ===
+    function renderTableRows(data){
       els.tbody.innerHTML = '';
       const tpl = document.getElementById('row');
       const frag = document.createDocumentFragment();
@@ -516,6 +589,8 @@
         const img = node.querySelector('img');
         img.src = p.image || `https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`;
         img.alt = `${p.name} logo`;
+        img.onerror = () => { img.onerror=null; img.src=`https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`; };
+
         node.querySelector('.name').textContent = p.name;
         node.querySelector('.sym').textContent = (p.symbol || '').toUpperCase();
 
@@ -524,23 +599,57 @@
         const c24 = p.price_change_percentage_24h;
         const el24 = node.querySelector('.chg24'); el24.textContent = fmtPct(c24); el24.classList.add(c24>=0?'up':'down');
 
-        // 7d pct（在 markets 接口 price_change_percentage=7d 时可从扩展字段读取；不同库字段名可能不同）
         const c7 = p.price_change_percentage_7d_in_currency ?? p.price_change_percentage_7d ?? null;
         const el7 = node.querySelector('.chg7'); el7.textContent = c7==null? '—' : fmtPct(c7); el7.classList.add(c7>=0?'up':'down');
 
-        // sparkline
         const prices = p.sparkline_in_7d?.price;
         drawSpark(node.querySelector('.spark'), prices);
 
         node.querySelector('.vol').textContent = '$'+ shortNum(p.total_volume);
 
-        // action: link to CoinGecko coin page
         const loc = state.lang==='zh' ? 'zh' : 'en';
         node.querySelector('[data-role="open"]').href = `https://www.coingecko.com/${loc}/coins/${p.id}`;
 
         frag.appendChild(node);
       });
       els.tbody.appendChild(frag);
+    }
+
+    // === Cards (mobile) ===
+    function renderCards(data){
+      els.cardList.innerHTML = '';
+      const tpl = document.getElementById('cardItem');
+      const frag = document.createDocumentFragment();
+      data.forEach((p,idx)=>{
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.rank').textContent = p.market_cap_rank ?? (idx+1);
+        const img = node.querySelector('img');
+        img.src = p.image || `https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`;
+        img.alt = `${p.name} logo`;
+        img.onerror = () => { img.onerror=null; img.src=`https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`; };
+
+        node.querySelector('.name').textContent = p.name;
+        node.querySelector('.sym').textContent = (p.symbol || '').toUpperCase();
+        node.querySelector('.price').textContent = fmtUSD(p.current_price);
+
+        const c24 = p.price_change_percentage_24h;
+        const el24 = node.querySelector('.chg24'); el24.textContent = fmtPct(c24); el24.classList.add(c24>=0?'up':'down');
+
+        const c7 = p.price_change_percentage_7d_in_currency ?? p.price_change_percentage_7d ?? null;
+        const el7 = node.querySelector('.chg7'); el7.textContent = c7==null? '—' : fmtPct(c7); el7.classList.add(c7>=0?'up':'down');
+
+        node.querySelector('.mcap').textContent = '$'+ shortNum(p.market_cap);
+        node.querySelector('.vol').textContent = '$'+ shortNum(p.total_volume);
+
+        const prices = p.sparkline_in_7d?.price;
+        drawSpark(node.querySelector('.spark'), prices);
+
+        const loc = state.lang==='zh' ? 'zh' : 'en';
+        node.querySelector('[data-role="open"]').href = `https://www.coingecko.com/${loc}/coins/${p.id}`;
+
+        frag.appendChild(node);
+      });
+      els.cardList.appendChild(frag);
     }
 
     /* ========= Filters & sort ========= */
@@ -557,7 +666,8 @@
 
     /* ========= Wallet mock ========= */
     function updateWalletUI(){
-      els.walletBtn.querySelector('span').textContent = state.wallet ? (state.wallet.slice(0,6)+'…'+state.wallet.slice(-4)) : t('connect');
+      const label = state.wallet ? (state.wallet.slice(0,6)+'…'+state.wallet.slice(-4)) : t('connect');
+      els.walletBtn.querySelector('span').textContent = label;
       els.currAddr.value = state.wallet || '';
     }
     async function tryMetaMask(){
@@ -569,7 +679,7 @@
         if(addr){
           state.wallet = addr; localStorage.setItem('wallet_addr', addr);
           updateWalletUI(); closeWallet();
-          // === 预留：真实业务接入点 ===
+          // 预留真实接入点：
           // fetch('/api/wallet/connect', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ address: addr, ts: Date.now() }) })
           console.log('[RFQ wallet] connected:', addr);
         }
@@ -595,7 +705,8 @@
     els.langSwitch.addEventListener('click', (e)=>{
       const btn = e.target.closest('button[data-lang]'); if(!btn) return;
       [...els.langSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
-      state.lang = btn.dataset.lang; localStorage.setItem('lang', state.lang); applyTexts(); render(); 
+      state.lang = btn.dataset.lang; localStorage.setItem('lang', state.lang);
+      applyTexts(); render(true);
     });
     els.sortSwitch.addEventListener('click', (e)=>{
       const btn = e.target.closest('button[data-sort]'); if(!btn) return;
@@ -624,6 +735,8 @@
     window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeWallet(); closeSettings(); } });
 
     /* ========= Main render ========= */
+    function isMobile(){ return window.matchMedia('(max-width: 768px)').matches; }
+
     async function render(force=false){
       applyTexts();
       els.apiKeyState.textContent = state.apiKey ? (state.lang==='zh'?'已设置':'Set') : (state.lang==='zh'?'未设置':'Not set');
@@ -634,10 +747,21 @@
       // filter/sort
       const kw = els.search.value;
       const data = marketsRaw.filter(bySearch(kw)).sort(sorters[state.sort]);
-      renderRows(data);
+      // render both containers; CSS决定显示谁
+      renderTableRows(data);
+      renderCards(data);
     }
 
-    // init
+    // init + re-render on layout change（避免频繁，做一个简单节流）
+    let lastMobile = isMobile(), rAF;
+    window.addEventListener('resize', () => {
+      if(isMobile() !== lastMobile){
+        lastMobile = !lastMobile;
+        cancelAnimationFrame(rAF);
+        rAF = requestAnimationFrame(()=> render());
+      }
+    });
+
     ;[...els.langSwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.lang === state.lang));
     els.apiKeyState.textContent = state.apiKey ? '已设置' : '未设置';
     render();
