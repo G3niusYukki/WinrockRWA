@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="zh" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>大宗商品贸易 / Bulk Commodities Trade</title>
+  <meta name="color-scheme" content="light">
+  <style>
+    /* ---------- Design Tokens ---------- */
+    :root{
+      --bg: radial-gradient(1200px 800px at 10% -10%, #eef5ff 0%, transparent 50%),
+            radial-gradient(1000px 700px at 90% 0%, #fff6ee 0%, transparent 45%),
+            linear-gradient(180deg, #f8fbff 0%, #f7f7fb 100%);
+      --panel: rgba(255,255,255,.72);
+      --card: rgba(255,255,255,.82);
+      --text: #0f172a;
+      --muted:#56607a;
+      --border: rgba(15,23,42,.08);
+      --brand:#246bff;
+      --brand-ghost:#e8f0ff;
+      --ok:#0ea5e9;
+      --warn:#fb923c;
+      --shadow: 0 10px 30px rgba(15,23,42,.08);
+      --radius: 14px;
+      --chip: rgba(15,23,42,.05);
+      --chip-active: #101828;
+      --chip-active-fg:#fff;
+      --focus: 0 0 0 3px rgba(36,107,255,.25);
+    }
+
+    /* ---------- Base ---------- */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", "PingFang SC", "Noto Sans CJK", "Microsoft YaHei", Arial, sans-serif;
+      background: var(--bg) fixed;
+    }
+    a{color:inherit}
+    .container{max-width:1200px; margin:0 auto; padding:24px}
+
+    /* ---------- Header ---------- */
+    .app-header{
+      position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(10px);
+      background:var(--panel); border-bottom:1px solid var(--border);
+    }
+    .toolbar{display:flex; gap:16px; align-items:center; justify-content:space-between}
+    .brand{
+      display:flex; align-items:center; gap:12px; padding:10px 0;
+      font-weight:700; letter-spacing:.2px;
+    }
+    .brand-badge{display:inline-grid; place-items:center; width:36px; height:36px;
+      border-radius:9px; background:linear-gradient(135deg,#246bff 0%,#8b5cf6 100%); color:#fff; font-weight:800}
+    .brand span{font-size:18px}
+
+    .search{
+      flex:1; display:flex; align-items:center; gap:8px; max-width:520px; background:var(--card);
+      padding:10px 12px; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow)
+    }
+    .search input{
+      flex:1; border:0; outline:0; background:transparent; font-size:15px
+    }
+    .icon-btn{border:0; background:transparent; cursor:pointer; padding:6px; border-radius:8px}
+    .icon-btn:hover{background:rgba(15,23,42,.06)}
+
+    .controls{display:flex; align-items:center; gap:12px}
+    .chip-group{display:flex; gap:6px; background:rgba(15,23,42,.04); padding:5px; border-radius:99px}
+    .chip{
+      border:0; cursor:pointer; padding:8px 12px; border-radius:99px; background:transparent; color:var(--muted); font-weight:600
+    }
+    .chip.is-active{background:var(--chip-active); color:var(--chip-active-fg); box-shadow:0 6px 20px rgba(16,24,40,.2)}
+
+    /* ---------- Filters ---------- */
+    .filters{
+      margin:18px 0 8px; display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap
+    }
+    .select{
+      display:flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--border);
+      padding:10px 12px; border-radius:12px; box-shadow:var(--shadow)
+    }
+    .select select{border:0; outline:0; background:transparent; font-weight:600}
+
+    /* ---------- Cards ---------- */
+    .grid{display:grid; gap:18px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr))}
+    .card{
+      position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+      box-shadow:var(--shadow); overflow:hidden; transition:transform .2s ease, box-shadow .2s ease
+    }
+    .card:hover{transform:translateY(-2px); box-shadow:0 14px 40px rgba(15,23,42,.12)}
+    .card .media{
+      height:96px; background:
+        radial-gradient(80px 60px at 20% 30%, rgba(36,107,255,.18), transparent 60%),
+        radial-gradient(80px 60px at 80% 70%, rgba(139,92,246,.18), transparent 60%),
+        linear-gradient(180deg, #fafbff, #fff)
+    }
+    .badge{
+      position:absolute; top:12px; left:12px; padding:6px 10px; border-radius:10px; font-size:12px; font-weight:700;
+      background:var(--brand-ghost); color:var(--brand); border:1px solid rgba(36,107,255,.15)
+    }
+    .body{padding:14px 14px 12px}
+    .title{font-weight:800; font-size:16px; margin:4px 0 6px}
+    .desc{color:var(--muted); font-size:13px; min-height:2.4em}
+    .meta{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 8px}
+    .tag{
+      font-size:12px; padding:6px 8px; border-radius:9px; background:var(--chip); color:#1f2937; border:1px solid var(--border)
+    }
+    .price{
+      display:flex; align-items:baseline; gap:8px; margin:8px 0 12px
+    }
+    .price .num{font-size:20px; font-weight:800}
+    .price .unit{color:var(--muted); font-size:12px}
+    .actions{display:flex; gap:10px}
+    .btn{
+      flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+      padding:10px 12px; border-radius:12px; border:1px solid var(--border); background:#fff; font-weight:700
+    }
+    .btn.primary{background:var(--brand); border-color:transparent; color:#fff}
+    .btn.primary:focus{box-shadow:var(--focus)}
+    .btn:active{transform:translateY(1px)}
+
+    /* ---------- Modal ---------- */
+    .modal{position:fixed; inset:0; background:rgba(16,24,40,.35); display:flex; align-items:center; justify-content:center; padding:24px}
+    .hidden{display:none}
+    .modal-card{
+      width:min(720px, 100%); background:#fff; border-radius:16px; border:1px solid var(--border); box-shadow:0 30px 80px rgba(15,23,42,.2);
+      overflow:hidden
+    }
+    .modal-head{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--border)}
+    .modal-body{padding:18px}
+    .form{
+      display:grid; gap:12px; grid-template-columns: 1fr 1fr
+    }
+    .form-row{display:flex; gap:8px; align-items:center}
+    .form .col-1{grid-column:span 1} .form .col-2{grid-column:span 2}
+    label{font-size:13px; color:#374151; min-width:92px}
+    input, select, textarea{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#fff; outline:none;
+    }
+    input:focus, select:focus, textarea:focus{box-shadow:var(--focus)}
+    textarea{min-height:96px; resize:vertical}
+    .toast{
+      position:fixed; right:16px; bottom:16px; background:#111827; color:#fff; padding:12px 14px; border-radius:10px; box-shadow:var(--shadow)
+    }
+
+    /* ---------- Footer ---------- */
+    footer{color:#64748b; font-size:12px; margin:28px 0; text-align:center}
+
+    @media (max-width:720px){
+      .toolbar{flex-wrap:wrap; gap:10px}
+      .search{order:3; width:100%}
+      .form{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="container toolbar" role="navigation" aria-label="Top Navigation">
+      <div class="brand">
+        <span class="brand-badge" aria-hidden="true">BC</span>
+        <span id="i-brand">大宗商品贸易</span>
+      </div>
+
+      <div class="search" role="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23A6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0s.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input id="searchInput" type="search" placeholder="搜索商品 / Search products…" aria-label="Search products">
+        <button id="clearSearch" class="icon-btn" title="Clear" aria-label="Clear search">✕</button>
+      </div>
+
+      <div class="controls">
+        <div class="chip-group" id="langSwitch" role="tablist" aria-label="Language">
+          <button class="chip is-active" role="tab" data-lang="zh">中文</button>
+          <button class="chip" role="tab" data-lang="en">EN</button>
+        </div>
+        <div class="chip-group" id="ccySwitch" role="tablist" aria-label="Currency">
+          <button class="chip is-active" role="tab" data-ccy="CNY">CNY ¥</button>
+          <button class="chip" role="tab" data-ccy="USD">USD $</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <div class="container">
+    <section class="filters" aria-label="Filters">
+      <div class="chip-group" id="typeFilters" aria-label="Category filters">
+        <button class="chip is-active" data-type="all" id="flt-all">全部</button>
+        <button class="chip" data-type="gold" id="flt-gold">黄金</button>
+        <button class="chip" data-type="oil" id="flt-oil">石油</button>
+        <button class="chip" data-type="steel" id="flt-steel">钢材</button>
+        <button class="chip" data-type="nonferrous" id="flt-nonferrous">有色金属</button>
+      </div>
+      <div class="select">
+        <label for="sortSelect" id="i-sortBy">排序：</label>
+        <select id="sortSelect" aria-labelledby="i-sortBy">
+          <option value="featured">推荐</option>
+          <option value="priceAsc">价格从低到高</option>
+          <option value="priceDesc">价格从高到低</option>
+          <option value="nameAsc">名称 A-Z</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Product Grid -->
+    <main>
+      <div id="productGrid" class="grid" aria-live="polite"></div>
+    </main>
+
+    <footer id="i-disclaimer">* 所有价格均为示意价，仅用于演示。汇率为示例值（可对接后端自动更新）。</footer>
+  </div>
+
+  <!-- RFQ Modal -->
+  <div id="rfqModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rfqTitle">
+      <div class="modal-head">
+        <h3 id="rfqTitle">请求报价</h3>
+        <button class="icon-btn" id="rfqClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="rfqForm" class="form" novalidate>
+          <input type="hidden" id="rfqProductId">
+          <div class="col-2">
+            <label id="rfqProdLabel">商品</label>
+            <input type="text" id="rfqProductName" readonly>
+          </div>
+
+          <div class="col-1">
+            <label id="rfqQtyLabel">数量</label>
+            <div class="form-row">
+              <input id="rfqQty" type="number" min="1" step="any" required aria-required="true">
+              <span id="rfqUnit" class="tag" aria-live="polite">单位</span>
+            </div>
+          </div>
+
+          <div class="col-1">
+            <label id="rfqIncotermLabel">贸易术语</label>
+            <select id="rfqIncoterm">
+              <option>FOB</option><option>CIF</option><option>CFR</option>
+              <option>EXW</option><option>DAP</option>
+            </select>
+          </div>
+
+          <div class="col-1">
+            <label id="rfqPortLabel">目的港/交付地</label>
+            <input id="rfqPort" placeholder="例如 Shanghai / Rotterdam / Singapore" required>
+          </div>
+
+          <div class="col-1">
+            <label id="rfqCompanyLabel">公司</label>
+            <input id="rfqCompany" required>
+          </div>
+
+          <div class="col-1">
+            <label id="rfqContactLabel">联系人</label>
+            <input id="rfqContact" required>
+          </div>
+
+          <div class="col-1">
+            <label id="rfqEmailLabel">邮箱</label>
+            <input id="rfqEmail" type="email" required>
+          </div>
+
+          <div class="col-1">
+            <label id="rfqPhoneLabel">电话</label>
+            <input id="rfqPhone" type="tel">
+          </div>
+
+          <div class="col-2">
+            <label id="rfqNoteLabel">备注</label>
+            <textarea id="rfqNote" placeholder=""></textarea>
+          </div>
+
+          <div class="col-2" style="display:flex; gap:12px; justify-content:flex-end; margin-top:6px">
+            <button type="button" class="btn" id="rfqCancel">取消</button>
+            <button type="submit" class="btn primary" id="rfqSubmit">提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <template id="card">
+    <article class="card">
+      <div class="media"></div>
+      <span class="badge">TYPE</span>
+      <div class="body">
+        <div class="title">TITLE</div>
+        <div class="desc">DESC</div>
+        <div class="meta"></div>
+        <div class="price"><span class="num">—</span><span class="unit">/ UNIT</span></div>
+        <div class="actions">
+          <button class="btn" data-role="details"><span class="i-details">详情</span></button>
+          <button class="btn primary" data-role="rfq"><span class="i-rfq">请求报价</span></button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script>
+  ;(() => {
+    /* ============ i18n ============ */
+    const i18n = {
+      zh: {
+        brand: "大宗商品贸易",
+        search_placeholder: "搜索商品 / Search products…",
+        filters: { all:"全部", gold:"黄金", oil:"石油", steel:"钢材", nonferrous:"有色金属" },
+        sortBy: "排序：",
+        sort: { featured:"推荐", priceAsc:"价格从低到高", priceDesc:"价格从高到低", nameAsc:"名称 A-Z" },
+        unit: { t_oz:"金衡盎司", bbl:"桶", ton:"吨" },
+        card: {
+          grade:"品位",
+          spec:"规格",
+          origin:"产地/标准",
+          lot:"批量",
+          moq:"起订量",
+          incoterms:"可选贸易术语",
+          indicative:"示意价",
+          updated:"更新",
+          details:"详情",
+          rfq:"请求报价"
+        },
+        rfq: {
+          title:"请求报价",
+          prod:"商品",
+          qty:"数量",
+          unit:"单位",
+          incoterm:"贸易术语",
+          port:"目的港/交付地",
+          company:"公司",
+          contact:"联系人",
+          email:"邮箱",
+          phone:"电话",
+          note:"备注",
+          cancel:"取消",
+          submit:"提交",
+          success:"已提交请求（演示）。我们会尽快与您联系。"
+        },
+        disclaimer:"* 所有价格均为示意价，仅用于演示。汇率为示例值（可对接后端自动更新）。"
+      },
+      en: {
+        brand: "Bulk Commodities Trade",
+        search_placeholder: "Search products…",
+        filters: { all:"All", gold:"Gold", oil:"Oil", steel:"Steel", nonferrous:"Non‑ferrous" },
+        sortBy: "Sort:",
+        sort: { featured:"Featured", priceAsc:"Price: Low → High", priceDesc:"Price: High → Low", nameAsc:"Name A–Z" },
+        unit: { t_oz:"troy oz", bbl:"barrel", ton:"tonne" },
+        card: {
+          grade:"Grade",
+          spec:"Spec",
+          origin:"Origin/Standard",
+          lot:"Lot Size",
+          moq:"MOQ",
+          incoterms:"Incoterms",
+          indicative:"Indicative",
+          updated:"Updated",
+          details:"Details",
+          rfq:"Request Quote"
+        },
+        rfq: {
+          title:"Request for Quote",
+          prod:"Product",
+          qty:"Quantity",
+          unit:"Unit",
+          incoterm:"Incoterm",
+          port:"Destination/Delivery",
+          company:"Company",
+          contact:"Contact",
+          email:"Email",
+          phone:"Phone",
+          note:"Notes",
+          cancel:"Cancel",
+          submit:"Submit",
+          success:"RFQ submitted (demo). We'll get back to you shortly."
+        },
+        disclaimer:"* All prices are indicative for demo only. FX rate is a sample value (wire it to your backend to auto‑update)."
+      }
+    }
+    const t = (path) => path.split('.').reduce((o,k)=>o?.[k], i18n[state.lang]) ?? path;
+    const unitLabel = key => i18n[state.lang].unit[key] || key;
+
+    /* ============ State ============ */
+    const state = {
+      lang: localStorage.getItem('lang') || 'zh',
+      ccy: localStorage.getItem('ccy') || 'CNY',
+      type: 'all',
+      search: '',
+      sort: 'featured',
+      fx: { USD: 1, CNY: 7.20 } // 示例汇率
+    };
+    document.documentElement.lang = state.lang;
+
+    /* ============ Data (示例) ============ */
+    // 价格为“示意 USD/单位”，仅用于 UI 联调演示
+    const products = [
+      // GOLD
+      {
+        id:'xau-spot', type:'gold',
+        name:{zh:'黄金（现货 XAU）', en:'Gold (Spot XAU)'},
+        desc:{zh:'伦敦金现货，LBMA 合格交割', en:'London spot gold, LBMA good delivery'},
+        badge:{zh:'黄金', en:'GOLD'},
+        unit:'t_oz', indicativeUSD: 2400,
+        grade:{zh:'Au ≥ 99.5%（合格交割）', en:'Au ≥ 99.5% (Good Delivery)'},
+        spec:{zh:'按金衡盎司计价', en:'Priced per troy ounce'},
+        origin:{zh:'全球', en:'Global'},
+        lot:{zh:'1,000 盎司', en:'1,000 oz'},
+        moq:{zh:'500 盎司', en:'500 oz'},
+        updated:'2025-08-10'
+      },
+      // OIL
+      {
+        id:'wti-crude', type:'oil',
+        name:{zh:'原油（WTI）', en:'Crude Oil (WTI)'},
+        desc:{zh:'库欣交割，甜质轻质原油', en:'Cushing delivery, light sweet crude'},
+        badge:{zh:'石油', en:'OIL'},
+        unit:'bbl', indicativeUSD: 75,
+        grade:{zh:'API 39.6，硫含量0.24%', en:'API 39.6, Sulfur 0.24%'},
+        spec:{zh:'NYMEX 参考', en:'NYMEX reference'},
+        origin:{zh:'美国', en:'USA'},
+        lot:{zh:'1,000 桶/批', en:'1,000 bbl/lot'},
+        moq:{zh:'10,000 桶', en:'10,000 bbl'},
+        updated:'2025-07-22'
+      },
+      {
+        id:'brent-crude', type:'oil',
+        name:{zh:'原油（Brent）', en:'Crude Oil (Brent)'},
+        desc:{zh:'北海布伦特基准', en:'North Sea Brent benchmark'},
+        badge:{zh:'石油', en:'OIL'},
+        unit:'bbl', indicativeUSD: 78,
+        grade:{zh:'API 38-40，甜质', en:'API 38–40, sweet'},
+        spec:{zh:'ICE 参考', en:'ICE reference'},
+        origin:{zh:'北海', en:'North Sea'},
+        lot:{zh:'1,000 桶/批', en:'1,000 bbl/lot'},
+        moq:{zh:'10,000 桶', en:'10,000 bbl'},
+        updated:'2025-07-22'
+      },
+      // STEEL
+      {
+        id:'rebar-hrb400', type:'steel',
+        name:{zh:'螺纹钢 HRB400', en:'Steel Rebar HRB400'},
+        desc:{zh:'热轧带肋钢筋，建筑用', en:'Hot-rolled ribbed rebar'},
+        badge:{zh:'钢材', en:'STEEL'},
+        unit:'ton', indicativeUSD: 570,
+        grade:{zh:'HRB400，国标 GB 1499.2', en:'HRB400, GB 1499.2'},
+        spec:{zh:'Φ16mm（可选 12–32mm）', en:'Φ16mm (12–32mm optional)'},
+        origin:{zh:'中国', en:'China'},
+        lot:{zh:'25 吨/批', en:'25 t/lot'},
+        moq:{zh:'100 吨', en:'100 t'},
+        updated:'2025-07-02'
+      },
+      {
+        id:'hrc-1006', type:'steel',
+        name:{zh:'热轧卷 HRC SAE1006', en:'Hot Rolled Coil HRC SAE1006'},
+        desc:{zh:'低碳热轧卷板', en:'Low-carbon hot rolled coil'},
+        badge:{zh:'钢材', en:'STEEL'},
+        unit:'ton', indicativeUSD: 620,
+        grade:{zh:'SAE1006 / Q235B', en:'SAE1006 / Q235B'},
+        spec:{zh:'2.0–3.0mm × 1250mm', en:'2.0–3.0mm × 1250mm'},
+        origin:{zh:'东南亚/中国', en:'SEA/China'},
+        lot:{zh:'25 吨/卷', en:'25 t/coil'},
+        moq:{zh:'200 吨', en:'200 t'},
+        updated:'2025-06-18'
+      },
+      {
+        id:'billet-150x150', type:'steel',
+        name:{zh:'方坯 150×150', en:'Steel Billet 150×150'},
+        desc:{zh:'连铸方坯', en:'Continuous casting billet'},
+        badge:{zh:'钢材', en:'STEEL'},
+        unit:'ton', indicativeUSD: 530,
+        grade:{zh:'Q235 / 3SP', en:'Q235 / 3SP'},
+        spec:{zh:'150×150×6–9m', en:'150×150×6–9m'},
+        origin:{zh:'中东/亚洲', en:'MENA/Asia'},
+        lot:{zh:'300 吨/船', en:'300 t/parcel'},
+        moq:{zh:'1,000 吨', en:'1,000 t'},
+        updated:'2025-05-29'
+      },
+      // NON-FERROUS (示例“等”)
+      {
+        id:'copper-gradeA', type:'nonferrous',
+        name:{zh:'电解铜 Grade A', en:'Copper Cathode Grade A'},
+        desc:{zh:'LME 可交割', en:'LME deliverable'},
+        badge:{zh:'有色', en:'NON‑FERROUS'},
+        unit:'ton', indicativeUSD: 8800,
+        grade:{zh:'Cu ≥ 99.9935%', en:'Cu ≥ 99.9935%'},
+        spec:{zh:'1×1m，厚度8–10mm', en:'1×1m, 8–10mm'},
+        origin:{zh:'智利/刚果等', en:'CL/DRC etc.'},
+        lot:{zh:'20 吨/柜', en:'20 t/container'},
+        moq:{zh:'100 吨', en:'100 t'},
+        updated:'2025-07-30'
+      },
+      {
+        id:'alum-a7', type:'nonferrous',
+        name:{zh:'铝锭 A7', en:'Aluminum Ingot A7'},
+        desc:{zh:'P1020A 参考', en:'P1020A reference'},
+        badge:{zh:'有色', en:'NON‑FERROUS'},
+        unit:'ton', indicativeUSD: 2500,
+        grade:{zh:'Al ≥ 99.7%', en:'Al ≥ 99.7%'},
+        spec:{zh:'约 22.5kg/锭', en:'≈22.5kg/ingot'},
+        origin:{zh:'中东/东南亚', en:'MENA/SEA'},
+        lot:{zh:'25 吨/批', en:'25 t/lot'},
+        moq:{zh:'100 吨', en:'100 t'},
+        updated:'2025-06-08'
+      }
+    ];
+
+    /* ============ DOM refs ============ */
+    const el = {
+      brand: document.getElementById('i-brand'),
+      search: document.getElementById('searchInput'),
+      clear: document.getElementById('clearSearch'),
+      langSwitch: document.getElementById('langSwitch'),
+      ccySwitch: document.getElementById('ccySwitch'),
+      typeFilters: document.getElementById('typeFilters'),
+      sort: document.getElementById('sortSelect'),
+      grid: document.getElementById('productGrid'),
+      disclaimer: document.getElementById('i-disclaimer'),
+      sortBy: document.getElementById('i-sortBy'),
+      rfqModal: document.getElementById('rfqModal'),
+      rfqClose: document.getElementById('rfqClose'),
+      rfqCancel: document.getElementById('rfqCancel'),
+      rfqForm: document.getElementById('rfqForm'),
+      rfqTitle: document.getElementById('rfqTitle'),
+      rfqProductId: document.getElementById('rfqProductId'),
+      rfqProductName: document.getElementById('rfqProductName'),
+      rfqQty: document.getElementById('rfqQty'),
+      rfqUnit: document.getElementById('rfqUnit'),
+      rfqIncoterm: document.getElementById('rfqIncoterm'),
+      rfqPort: document.getElementById('rfqPort'),
+      rfqCompany: document.getElementById('rfqCompany'),
+      rfqContact: document.getElementById('rfqContact'),
+      rfqEmail: document.getElementById('rfqEmail'),
+      rfqPhone: document.getElementById('rfqPhone'),
+      rfqNote: document.getElementById('rfqNote'),
+      rfqProdLabel: document.getElementById('rfqProdLabel'),
+      rfqQtyLabel: document.getElementById('rfqQtyLabel'),
+      rfqIncotermLabel: document.getElementById('rfqIncotermLabel'),
+      rfqPortLabel: document.getElementById('rfqPortLabel'),
+      rfqCompanyLabel: document.getElementById('rfqCompanyLabel'),
+      rfqContactLabel: document.getElementById('rfqContactLabel'),
+      rfqEmailLabel: document.getElementById('rfqEmailLabel'),
+      rfqPhoneLabel: document.getElementById('rfqPhoneLabel'),
+      rfqNoteLabel: document.getElementById('rfqNoteLabel'),
+      rfqCancelBtn: document.getElementById('rfqCancel'),
+      rfqSubmitBtn: document.getElementById('rfqSubmit')
+    };
+
+    /* ============ Helpers ============ */
+    const locale = () => state.lang === 'zh' ? 'zh-CN' : 'en-US';
+    const formatMoney = usd => {
+      const rate = state.ccy === 'USD' ? 1 : state.fx.CNY;
+      const amt = usd * rate;
+      return new Intl.NumberFormat(locale(), {style:'currency', currency:state.ccy}).format(amt);
+    };
+    const byType = t => state.type === 'all' ? true : t === state.type;
+    const searchMatch = p => {
+      if (!state.search) return true;
+      const kw = state.search.trim().toLowerCase();
+      const fields = [
+        p.name[state.lang], p.name.zh, p.name.en,
+        p.desc[state.lang], p.badge[state.lang], p.type
+      ].join(' ').toLowerCase();
+      return fields.includes(kw);
+    };
+    const sorters = {
+      featured: () => 0,
+      priceAsc: (a,b) => (a.indicativeUSD ?? 0) - (b.indicativeUSD ?? 0),
+      priceDesc: (a,b) => (b.indicativeUSD ?? 0) - (a.indicativeUSD ?? 0),
+      nameAsc: (a,b) => a.name[state.lang].localeCompare(b.name[state.lang])
+    };
+
+    /* ============ Render ============ */
+    function renderUITexts(){
+      // Header & controls
+      el.brand.textContent = t('brand');
+      el.search.placeholder = t('search_placeholder');
+      // Filters text
+      document.getElementById('flt-all').textContent = t('filters.all');
+      document.getElementById('flt-gold').textContent = t('filters.gold');
+      document.getElementById('flt-oil').textContent  = t('filters.oil');
+      document.getElementById('flt-steel').textContent= t('filters.steel');
+      document.getElementById('flt-nonferrous').textContent= t('filters.nonferrous');
+      // Sort
+      el.sortBy.textContent = t('sortBy');
+      el.sort.options[0].textContent = t('sort.featured');
+      el.sort.options[1].textContent = t('sort.priceAsc');
+      el.sort.options[2].textContent = t('sort.priceDesc');
+      el.sort.options[3].textContent = t('sort.nameAsc');
+      // Footer
+      el.disclaimer.textContent = t('disclaimer');
+      // RFQ labels
+      el.rfqTitle.textContent = t('rfq.title');
+      el.rfqProdLabel.textContent = t('rfq.prod');
+      el.rfqQtyLabel.textContent = t('rfq.qty');
+      el.rfqIncotermLabel.textContent = t('rfq.incoterm');
+      el.rfqPortLabel.textContent = t('rfq.port');
+      el.rfqCompanyLabel.textContent = t('rfq.company');
+      el.rfqContactLabel.textContent = t('rfq.contact');
+      el.rfqEmailLabel.textContent = t('rfq.email');
+      el.rfqPhoneLabel.textContent = t('rfq.phone');
+      el.rfqNoteLabel.textContent = t('rfq.note');
+      el.rfqCancelBtn.textContent = t('rfq.cancel');
+      el.rfqSubmitBtn.textContent = t('rfq.submit');
+      document.querySelectorAll('.i-details').forEach(n=>n.textContent = t('card.details'));
+      document.querySelectorAll('.i-rfq').forEach(n=>n.textContent = t('card.rfq'));
+      document.documentElement.lang = state.lang;
+    }
+
+    function renderProducts(){
+      el.grid.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      const data = products
+        .filter(p => byType(p.type))
+        .filter(searchMatch)
+        .slice()
+        .sort(sorters[state.sort]);
+
+      const tpl = document.getElementById('card');
+      data.forEach(p=>{
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.badge').textContent = p.badge[state.lang];
+        node.querySelector('.title').textContent = p.name[state.lang];
+        node.querySelector('.desc').textContent = p.desc[state.lang];
+        const meta = node.querySelector('.meta');
+        meta.append(tag(`${t('card.grade')}: ${p.grade[state.lang]}`));
+        meta.append(tag(`${t('card.spec')}: ${p.spec[state.lang]}`));
+        meta.append(tag(`${t('card.origin')}: ${p.origin[state.lang]}`));
+        meta.append(tag(`${t('card.lot')}: ${p.lot[state.lang]}`));
+        meta.append(tag(`${t('card.moq')}: ${p.moq[state.lang]}`));
+        meta.append(tag(`${t('card.incoterms')}: FOB/CIF/CFR/EXW/DAP`));
+
+        const price = node.querySelector('.price');
+        price.querySelector('.num').textContent = p.indicativeUSD ? formatMoney(p.indicativeUSD) : '—';
+        price.querySelector('.unit').textContent = `/ ${unitLabel(p.unit)} • ${t('card.indicative')} • ${t('card.updated')} ${p.updated}`;
+
+        // actions
+        node.querySelector('[data-role="details"]').addEventListener('click',()=>showToast(
+          p.name[state.lang] + ' — ' + p.desc[state.lang]
+        ));
+        node.querySelector('[data-role="rfq"]').addEventListener('click',()=>openRFQ(p));
+
+        frag.appendChild(node);
+      });
+      el.grid.appendChild(frag);
+      renderUITexts();
+    }
+    const tag = txt => { const s=document.createElement('span'); s.className='tag'; s.textContent=txt; return s; };
+
+    /* ============ RFQ ============ */
+    function openRFQ(p){
+      el.rfqProductId.value = p.id;
+      el.rfqProductName.value = p.name[state.lang];
+      el.rfqQty.value = '';
+      el.rfqUnit.textContent = unitLabel(p.unit);
+      el.rfqModal.classList.remove('hidden');
+      el.rfqModal.setAttribute('aria-hidden','false');
+      el.rfqQty.focus();
+    }
+    function closeRFQ(){
+      el.rfqModal.classList.add('hidden');
+      el.rfqModal.setAttribute('aria-hidden','true');
+    }
+    el.rfqClose.addEventListener('click', closeRFQ);
+    el.rfqCancel.addEventListener('click', closeRFQ);
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeRFQ(); });
+
+    el.rfqForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      // 简单校验
+      const required = [el.rfqQty, el.rfqPort, el.rfqCompany, el.rfqContact, el.rfqEmail];
+      let ok = true;
+      required.forEach(input=>{
+        if(!input.value?.trim()){ input.focus(); ok=false; }
+      });
+      if(!ok) return;
+
+      const payload = {
+        productId: el.rfqProductId.value,
+        productName: el.rfqProductName.value,
+        qty: el.rfqQty.value,
+        unit: el.rfqUnit.textContent,
+        incoterm: el.rfqIncoterm.value,
+        port: el.rfqPort.value,
+        company: el.rfqCompany.value,
+        contact: el.rfqContact.value,
+        email: el.rfqEmail.value,
+        phone: el.rfqPhone.value,
+        note: el.rfqNote.value,
+        lang: state.lang,
+        currency: state.ccy
+      };
+      // 这里接入你的后端：fetch('/api/rfq', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)})
+      console.log('RFQ payload (demo):', payload);
+
+      showToast(t('rfq.success'));
+      closeRFQ();
+      e.target.reset();
+    });
+
+    /* ============ Events ============ */
+    // 搜索
+    el.search.addEventListener('input', ()=>{ state.search = el.search.value; renderProducts(); });
+    el.clear.addEventListener('click', ()=>{ el.search.value = ''; state.search=''; renderProducts(); });
+
+    // 过滤
+    el.typeFilters.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-type]');
+      if(!btn) return;
+      [...el.typeFilters.querySelectorAll('.chip')].forEach(b=>b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      state.type = btn.dataset.type;
+      renderProducts();
+    });
+
+    // 排序
+    el.sort.addEventListener('change', ()=>{ state.sort = el.sort.value; renderProducts(); });
+
+    // 语言切换
+    el.langSwitch.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-lang]'); if(!btn) return;
+      [...el.langSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
+      state.lang = btn.dataset.lang; localStorage.setItem('lang', state.lang);
+      renderProducts();
+    });
+
+    // 货币切换
+    el.ccySwitch.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-ccy]'); if(!btn) return;
+      [...el.ccySwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
+      state.ccy = btn.dataset.ccy; localStorage.setItem('ccy', state.ccy);
+      renderProducts();
+    });
+
+    /* ============ Toast ============ */
+    let toastTimer;
+    function showToast(msg){
+      clearTimeout(toastTimer);
+      const tdiv = document.createElement('div');
+      tdiv.className = 'toast';
+      tdiv.textContent = msg;
+      document.body.appendChild(tdiv);
+      toastTimer = setTimeout(()=> tdiv.remove(), 3000);
+    }
+
+    /* ============ Init ============ */
+    // 初始化语言/货币状态 UI
+    ;[...el.langSwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.lang === state.lang));
+    ;[...el.ccySwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.ccy === state.ccy));
+    el.search.placeholder = t('search_placeholder');
+    renderProducts();
+  })();
+  </script>
+</body>
+</html>
