@@ -1,1 +1,179 @@
 
+<!doctype html>
+<html lang="zh" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>邀请返利 · 三级分销</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root{
+      --panel: color-mix(in srgb, white 82%, transparent);
+      --text:#0f172a; --muted:#475569; --border: rgba(15,23,42,.08); --brand:#2563eb;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --panel: rgba(17,24,39,.65); --text:#e5e7eb; --muted:#94a3b8; --border: rgba(148,163,184,.2); }
+      body{ background:linear-gradient(180deg,#0b1220,#0d1117); }
+    }
+    body{margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Noto Sans",Arial,sans-serif; color:var(--text)}
+    .container{max-width:980px; margin:0 auto; padding:20px}
+    h1{margin:8px 0 12px}
+    .card{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:16px; margin:12px 0}
+    .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    label{min-width:120px; color:var(--muted)}
+    input,select{padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:transparent; color:inherit; min-width:220px}
+    input:focus,select:focus{outline:none; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+    .btn{display:inline-flex; gap:6px; align-items:center; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#fff; cursor:pointer; font-weight:700}
+    .btn.primary{background:var(--brand); color:#fff; border-color:transparent}
+    .grid{display:grid; gap:12px; grid-template-columns:1fr 1fr}
+    @media (max-width:800px){ .grid{grid-template-columns:1fr} }
+    .list{display:grid; gap:8px}
+    .tag{display:inline-flex; gap:6px; align-items:center; background:rgba(15,23,42,.06); border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px}
+    .muted{color:var(--muted); font-size:12px}
+    .sep{height:1px; background:var(--border); margin:10px 0}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🤝 邀请返利 · 三级分销</h1>
+    <p class="muted">这是前端演示：生成邀请码、记录最多 3 级上级、计算返利。生产环境请接入后端风控与结算。</p>
+
+    <!-- 我的邀请码 -->
+    <div class="card">
+      <h3>我的邀请码</h3>
+      <div class="row">
+        <label>邀请码 / 邀请地址</label>
+        <input id="myCode" class="mono" readonly />
+        <button class="btn" id="genCode">重新生成</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label>邀请链接</label>
+        <input id="inviteLink" class="mono" readonly />
+        <button class="btn primary" id="copyLink">复制链接</button>
+      </div>
+      <div class="muted" style="margin-top:6px">默认以**已连接钱包地址**作为邀请码；如未连接，则使用本地随机码。链接形如：<code class="mono">/crypto/index.html?ref=你的码</code></div>
+      <div class="sep"></div>
+      <div class="row">
+        <a class="btn" href="/crypto/index.html">去市场页</a>
+        <button class="btn" id="simulateChild">添加测试下级（本地）</button>
+      </div>
+    </div>
+
+    <!-- 上级链 -->
+    <div class="card">
+      <h3>我的上级链（最多 3 级）</h3>
+      <div id="upline" class="list"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="clearChain">清除本地上级链</button>
+      </div>
+    </div>
+
+    <!-- 返利规则与结算器 -->
+    <div class="card">
+      <h3>返利规则 & 模拟结算</h3>
+      <div class="grid">
+        <div>
+          <div class="row"><label>平台费率</label><input id="feeRate" type="number" step="0.01" value="0.20" /> <span>%</span></div>
+          <div class="row"><label>L1 返利</label><input id="r1" type="number" step="0.1" value="30" /> <span>%</span></div>
+          <div class="row"><label>L2 返利</label><input id="r2" type="number" step="0.1" value="10" /> <span>%</span></div>
+          <div class="row"><label>L3 返利</label><input id="r3" type="number" step="0.1" value="5" /> <span>%</span></div>
+        </div>
+        <div>
+          <div class="row"><label>订单金额</label><input id="orderAmt" type="number" step="0.01" value="1000" /> <span>USD</span></div>
+          <div class="row"><button class="btn primary" id="calc">计算</button></div>
+          <div id="result" class="list"></div>
+        </div>
+      </div>
+      <div class="muted" style="margin-top:6px">示例：若订单 1000 USD、平台费率 0.2%，则平台费 2 USD；按 30/10/5% 返利，L1/L2/L3 分别为 0.60/0.20/0.10 USD。</div>
+    </div>
+
+    <!-- 我的下级（本地模拟） -->
+    <div class="card">
+      <h3>我的下级（本地演示）</h3>
+      <div id="downline" class="list"></div>
+      <div class="muted">仅在本地保存用于演示。真实环境需后端存储、反作弊、结算与导出。</div>
+    </div>
+  </div>
+
+  <script>
+  ;(()=> {
+    const $ = s => document.querySelector(s);
+    // 读取钱包地址作为默认邀请码
+    const wallet = localStorage.getItem('wallet_addr') || '';
+    function randomCode(){ return Array.from(crypto.getRandomValues(new Uint8Array(6))).map(b=>b.toString(36).slice(-1)).join('').toUpperCase(); }
+    function getMyCode(){
+      let code = localStorage.getItem('ref_my_code');
+      if(!code){ code = wallet || ('U'+randomCode()); localStorage.setItem('ref_my_code', code); }
+      return code;
+    }
+    function buildLink(){
+      const origin = location.origin || '';
+      const path = '/crypto/index.html';
+      return `${origin}${path}?ref=${encodeURIComponent(getMyCode())}`;
+    }
+    // 捕捉 ?ref= 形成上级链
+    (function captureRef(){
+      const ref = new URL(location.href).searchParams.get('ref');
+      if(!ref) return;
+      const old = JSON.parse(localStorage.getItem('ref_chain') || '[]');
+      const set = new Set([ref, ...old]);
+      const arr = Array.from(set).filter(x=>x && x!==getMyCode()).slice(0,3);
+      localStorage.setItem('ref_chain', JSON.stringify(arr));
+    })();
+
+    function renderUpline(){
+      const list = $('#upline'); list.innerHTML='';
+      const chain = JSON.parse(localStorage.getItem('ref_chain') || '[]');
+      if(!chain.length){ list.innerHTML = '<div class="muted">暂无上级记录（通过他人邀请链接访问将自动记录）。</div>'; return; }
+      const names = ['L1 上级','L2 上上级','L3 第三层'];
+      chain.forEach((c,i)=>{
+        const div = document.createElement('div');
+        div.innerHTML = `<span class="tag">${names[i]}</span> <span class="mono">${c}</span>`;
+        list.appendChild(div);
+      });
+    }
+    function renderDownline(){
+      const down = JSON.parse(localStorage.getItem('ref_downline') || '[]');
+      const cont = $('#downline'); cont.innerHTML='';
+      if(!down.length){ cont.innerHTML='<div class="muted">暂无下级（点击「添加测试下级」本地造数）。</div>'; return; }
+      down.forEach(d=>{
+        const div = document.createElement('div');
+        div.innerHTML = `<span class="tag">L1</span> <span class="mono">${d.code}</span> <span class="muted">${new Date(d.ts).toLocaleString()}</span>`;
+        cont.appendChild(div);
+      });
+    }
+
+    // 事件
+    $('#myCode').value = getMyCode();
+    $('#inviteLink').value = buildLink();
+    $('#genCode').onclick = ()=>{ localStorage.removeItem('ref_my_code'); $('#myCode').value=getMyCode(); $('#inviteLink').value=buildLink(); };
+    $('#copyLink').onclick = async()=>{ try{ await navigator.clipboard.writeText($('#inviteLink').value); alert('已复制'); }catch{ alert('复制失败'); } };
+    $('#simulateChild').onclick = ()=>{
+      const arr = JSON.parse(localStorage.getItem('ref_downline') || '[]');
+      arr.push({ code: 'U'+Math.random().toString(36).slice(2,8).toUpperCase(), ts: Date.now() });
+      localStorage.setItem('ref_downline', JSON.stringify(arr));
+      renderDownline();
+    };
+    $('#clearChain').onclick = ()=>{ localStorage.removeItem('ref_chain'); renderUpline(); };
+
+    // 结算计算器
+    $('#calc').onclick = ()=>{
+      const amt = Number($('#orderAmt').value||0);
+      const feeRate = Number($('#feeRate').value||0)/100;
+      const r1 = Number($('#r1').value||0)/100, r2 = Number($('#r2').value||0)/100, r3 = Number($('#r3').value||0)/100;
+      const fee = amt * feeRate;
+      const v1 = fee * r1, v2 = fee * r2, v3 = fee * r3;
+      $('#result').innerHTML = `
+        <div><span class="tag">平台费</span> ${fee.toFixed(6)} USD</div>
+        <div><span class="tag">L1</span> ${v1.toFixed(6)} USD</div>
+        <div><span class="tag">L2</span> ${v2.toFixed(6)} USD</div>
+        <div><span class="tag">L3</span> ${v3.toFixed(6)} USD</div>
+      `;
+    };
+
+    renderUpline(); renderDownline();
+  })();
+  </script>
+</body>
+</html>
