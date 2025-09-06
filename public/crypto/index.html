@@ -6,7 +6,7 @@
   <title>加密市场 Top 100 / Crypto Top 100</title>
   <meta name="color-scheme" content="light dark">
   <style>
-    /* ===== Design tokens ===== */
+    /* ===== Design tokens（保留你已有风格，略） ===== */
     :root{
       --bg: radial-gradient(1200px 800px at 10% -10%, #eef5ff 0%, transparent 55%),
             radial-gradient(1000px 700px at 90% 0%, #fff6ee 0%, transparent 45%),
@@ -15,7 +15,7 @@
       --card: color-mix(in srgb, white 86%, transparent);
       --text: #0f172a; --muted:#475569; --border: rgba(15,23,42,.08);
       --brand:#2563eb; --ok:#16a34a; --down:#ef4444; --warn:#f59e0b;
-      --shadow: 0 12px 36px rgba(15,23,42,.10);
+      --shadow: 0 10px 28px rgba(15,23,42,.10);
       --radius: 14px; --focus: 0 0 0 3px color-mix(in srgb, var(--brand) 30%, transparent);
       --chip: rgba(15,23,42,.05);
     }
@@ -24,43 +24,53 @@
         --bg: linear-gradient(180deg,#0b1220,#0d1117);
         --panel: rgba(17,24,39,.5); --card: rgba(17,24,39,.65);
         --text: #e5e7eb; --muted:#94a3b8; --border: rgba(148,163,184,.2);
-        --shadow: 0 12px 36px rgba(0,0,0,.35);
+        --shadow: 0 8px 26px rgba(0,0,0,.35);
         --chip: rgba(255,255,255,.06);
       }
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0; color:var(--text); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", "PingFang SC","Noto Sans", Arial, sans-serif; background: var(--bg) fixed}
+    body{margin:0; color:var(--text); font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Noto Sans",Arial,sans-serif; background:var(--bg) fixed}
     a{color:inherit; text-decoration:none}
     .container{max-width:1200px; margin:0 auto; padding:20px}
+    @media (max-width:1280px){ .container{padding-inline:16px} }
+    @media (max-width:480px){ body{font-size:15px} }
 
-    /* ===== Header / toolbar ===== */
+    /* Header / toolbar（保留移动端修复） */
     .app-header{position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(10px); background:var(--panel); border-bottom:1px solid var(--border)}
-    .toolbar{display:flex; gap:16px; align-items:center; justify-content:space-between}
-    .brand{display:flex; align-items:center; gap:12px; padding:10px 0; font-weight:800; letter-spacing:.2px}
-    .badge{display:inline-grid; place-items:center; width:36px; height:36px; border-radius:9px; background:linear-gradient(135deg,#2563eb 0%,#8b5cf6 100%); color:#fff}
-    .search{flex:1; display:flex; align-items:center; gap:8px; max-width:520px; background:var(--card); padding:10px 12px; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow)}
-    .search input{flex:1; border:0; outline:0; background:transparent; font-size:15px; color:inherit}
-    .icon-btn{border:0; background:transparent; cursor:pointer; padding:8px; border-radius:10px}
+    .toolbar{display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:nowrap}
+    .brand{display:flex; align-items:center; gap:10px; padding:10px 0; font-weight:800; letter-spacing:.2px; min-width:0}
+    .badge{display:inline-grid; place-items:center; width:36px; height:36px; border-radius:9px; background:linear-gradient(135deg,#2563eb 0%,#8b5cf6 100%); color:#fff; flex:0 0 auto}
+    .brand span{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:38vw}
+    .search{flex:1; display:flex; align-items:center; gap:8px; min-width:160px; max-width:520px; background:var(--card); padding:10px 12px; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow)}
+    .search input{flex:1; border:0; outline:0; background:transparent; font-size:15px; color:inherit; min-width:60px}
+    .icon-btn{border:0; background:transparent; cursor:pointer; padding:10px; border-radius:10px; touch-action:manipulation}
     .icon-btn:hover{background:rgba(0,0,0,.06)}
     .chip-group{display:flex; gap:6px; background:var(--chip); padding:5px; border-radius:999px}
-    .chip{border:0; cursor:pointer; padding:8px 12px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700}
+    .chip{border:0; cursor:pointer; padding:10px 12px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700; touch-action:manipulation}
     .chip.is-active{background:#0f172a; color:#fff; box-shadow:0 6px 20px rgba(16,24,40,.18)}
     @media (prefers-color-scheme: dark){ .chip.is-active{background:#e2e8f0; color:#111827} }
+    @media (max-width:720px){
+      .toolbar{flex-wrap:wrap}
+      .brand{order:1; flex:1 1 auto}
+      .search{order:3; width:100%}
+      .toolbar > .actions-bar{order:2; display:flex; gap:10px; align-items:center}
+    }
 
-    /* ===== Hero / global stats ===== */
-    .hero{margin:18px 0 12px; display:grid; gap:14px; grid-template-columns: 1.3fr 1fr}
+    /* Hero / stats */
+    .hero{margin:14px 0 10px; display:grid; gap:14px; grid-template-columns: 1.3fr 1fr}
     .panel{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px}
     .stats{display:grid; gap:10px; grid-template-columns: repeat(3,1fr)}
     .stat{display:flex; flex-direction:column; gap:2px}
     .stat .k{font-size:13px; color:var(--muted)}
     .stat .v{font-size:20px; font-weight:900}
     .delta.up{color:var(--ok)} .delta.down{color:var(--down)}
-    .settings{display:flex; gap:10px; align-items:center; justify-content:flex-end}
+    @media (max-width:920px){ .hero{grid-template-columns:1fr} }
+    @media (max-width:600px){ .stats{grid-template-columns:1fr 1fr} .stat .v{font-size:18px} }
 
-    /* ===== Table ===== */
+    /* Table (desktop) */
     .table{margin-top:12px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:auto}
-    table{width:100%; border-collapse:separate; border-spacing:0}
+    table{width:100%; border-collapse:separate; border-spacing:0; min-width:820px}
     thead th{position:sticky; top:0; background:color-mix(in srgb, var(--card) 90%, transparent); backdrop-filter:blur(6px); font-size:12px; color:var(--muted); text-align:left; padding:10px; border-bottom:1px solid var(--border)}
     tbody td{padding:12px 10px; border-bottom:1px solid var(--border); vertical-align:middle}
     tbody tr:hover{background:rgba(0,0,0,.03)}
@@ -72,24 +82,53 @@
     .chg.up{color:var(--ok)} .chg.down{color:var(--down)}
     .spark{width:120px; height:36px}
     .actions{display:flex; gap:8px}
-    .btn{display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; background:#fff; font-weight:700; cursor:pointer}
+    .btn{display:inline-flex; align-items:center; gap:6px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#fff; font-weight:700; cursor:pointer; touch-action:manipulation}
     .btn.primary{background:var(--brand); color:#fff; border-color:transparent}
     @media (prefers-color-scheme: dark){ .btn{background:#0b1220; color:#e5e7eb} }
 
-    /* ===== Modal ===== */
+    /* Mobile Cards */
+    .cards{display:none}
+    @media (max-width:768px){
+      .table{display:none}
+      .cards{display:grid; gap:12px}
+      .item{display:flex; flex-direction:column; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:12px}
+      .row1{display:flex; align-items:center; gap:10px; justify-content:space-between}
+      .left{display:flex; align-items:center; gap:10px; min-width:0}
+      .rank-badge{font-variant-numeric:tabular-nums; font-weight:800; width:28px; text-align:right}
+      .coin img{width:26px; height:26px}
+      .name{font-weight:800; max-width:44vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+      .sym{font-size:12px}
+      .price{font-weight:900}
+      .row2{display:grid; grid-template-columns: repeat(4, auto); gap:10px; align-items:center; font-size:13px}
+      .kv{display:flex; flex-direction:column; gap:2px}
+      .kv .k{color:var(--muted); font-size:12px}
+      .spark{width:100%; height:34px}
+      .actions{margin-top:6px}
+      @media (max-width:420px){
+        .row2{grid-template-columns: repeat(2, 1fr)}
+        .spark{display:none}
+      }
+    }
+
+    /* Modals（含K线） */
     .modal{position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; padding:22px}
     .hidden{display:none}
-    .modal-card{width:min(680px,100%); background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.35); overflow:hidden}
-    .modal-head{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border)}
-    .modal-body{padding:16px}
-    .form{display:grid; gap:12px}
+    .modal-card{width:min(920px,100%); background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.35); overflow:hidden}
+    .modal-head{display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--border)}
+    .modal-body{padding:12px}
+    .form{display:grid; gap:10px}
     label{font-size:13px; color:var(--muted)}
     input, select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:transparent; color:inherit}
     input:focus, select:focus{outline:none; box-shadow:var(--focus)}
-    .helper{color:var(--muted); font-size:12px}
-
+    .k-toolbar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px}
+    .seg{display:flex; gap:4px; background:var(--chip); padding:4px; border-radius:999px}
+    .seg button{border:0; padding:8px 10px; border-radius:999px; background:transparent; cursor:pointer; font-weight:700; color:var(--muted)}
+    .seg button.is-active{background:#0f172a; color:#fff}
+    .k-wrap{position:relative; background:#fff0; border:1px solid var(--border); border-radius:12px; overflow:hidden}
+    .k-canvas{width:100%; height:420px; display:block; background:linear-gradient(180deg, rgba(0,0,0,.02), transparent)}
+    .k-tooltip{position:absolute; pointer-events:none; background:rgba(17,24,39,.9); color:#fff; font-size:12px; padding:8px 10px; border-radius:8px; transform:translate(8px,8px)}
+    .k-legend{display:flex; gap:14px; align-items:center; font-size:12px; color:var(--muted); margin-top:6px}
     footer{color:#94a3b8; font-size:12px; text-align:center; margin:18px 0}
-    @media (max-width:920px){ .hero{grid-template-columns:1fr} .stats{grid-template-columns:1fr 1fr 1fr} .spark{display:none} }
   </style>
 </head>
 <body>
@@ -102,16 +141,17 @@
       </div>
 
       <div class="search" role="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23A6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0s.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        <input id="searchInput" type="search" placeholder="搜索币种 / Search…" aria-label="Search coins">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23A6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l 4.25 4.25c.41.41 1.08.41 1.49 0s.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input id="searchInput" type="search" placeholder="搜索币种 / Search…" aria-label="Search coins" inputmode="search" />
         <button id="clearSearch" class="icon-btn" title="Clear" aria-label="Clear search">✕</button>
       </div>
 
-      <div style="display:flex; align-items:center; gap:12px">
+      <div class="actions-bar" style="display:flex; align-items:center; gap:10px">
         <div class="chip-group" id="langSwitch" role="tablist" aria-label="Language">
           <button class="chip is-active" role="tab" data-lang="zh">中文</button>
           <button class="chip" role="tab" data-lang="en">EN</button>
         </div>
+        <a href="/affiliate/index.html" class="btn" title="邀请返利 / Affiliates">🤝 邀请返利</a>
         <button id="walletBtn" class="btn primary">👜 <span id="i-connect">连接钱包</span></button>
         <button id="settingsBtn" class="btn" title="API Key & 设置">⚙️</button>
       </div>
@@ -122,9 +162,9 @@
   <div class="container">
     <section class="hero">
       <div class="panel">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap">
           <h2 style="margin:0" id="i-marketOverview">市场概览</h2>
-          <div class="actions">
+          <div class="actions" style="display:flex; gap:8px; flex-wrap:wrap">
             <button class="btn" id="refreshBtn">⟲ <span id="i-refresh">刷新</span></button>
             <div class="chip-group" id="sortSwitch" aria-label="Sort">
               <button class="chip is-active" data-sort="mcap">MC</button>
@@ -135,7 +175,7 @@
         </div>
         <div class="stats" style="margin-top:10px">
           <div class="stat"><div class="k" id="i-gcap">全球总市值</div><div class="v" id="gcap">—</div></div>
-          <div class="stat"><div class="k" id="i-gdelta">24小时变动</div><div class="v" id="gdelta" class="delta">—</div></div>
+          <div class="stat"><div class="k" id="i-gdelta">24小时变动</div><div class="v delta" id="gdelta">—</div></div>
           <div class="stat"><div class="k" id="i-btcdom">BTC 占比</div><div class="v" id="btcdom">—</div></div>
         </div>
       </div>
@@ -144,17 +184,15 @@
           <div class="k" id="i-apiKeyLabel">CoinGecko API Key</div>
           <div class="v" id="apiKeyState">未设置</div>
         </div>
-        <p class="helper" id="i-apiHelp">
-          使用公开 Demo Key 也可以（仅限速不同）。未设置时仍可尝试回退数据。
-        </p>
+        <p class="helper" id="i-apiHelp">使用公开 Demo Key 也可以（仅限速不同）。未设置时仍可尝试回退数据。</p>
         <div class="actions">
           <button class="btn" id="openKey" style="width:100%">🔑 <span id="i-openKey">设置 / 更换 Key</span></button>
         </div>
       </div>
     </section>
 
-    <!-- Table -->
-    <section class="table" aria-label="Top 100 cryptocurrencies">
+    <!-- Desktop Table -->
+    <section class="table" aria-label="Top 100 cryptocurrencies (table)">
       <table>
         <thead>
           <tr>
@@ -172,12 +210,17 @@
       </table>
     </section>
 
+    <!-- Mobile Cards -->
+    <section class="cards" aria-label="Top 100 cryptocurrencies (cards)">
+      <div id="cardList" role="list"></div>
+    </section>
+
     <footer id="i-disclaimer">
-      * 数据源优先 CoinGecko（需 API Key），失败时退化到 CoinCap 基础数据/图标。前端做了本地缓存和频率控制；请在真实产品中把 Key 放到后端代理更安全。
+      * 主数据源：CoinGecko（需 API Key；Demo 计划用 `x-cg-demo-api-key` 或 `x_cg_demo_api_key`）。失败时退化到 CoinCap 基础数据/图标。生产建议将 Key 放到后端代理。
     </footer>
   </div>
 
-  <!-- Wallet Modal -->
+  <!-- Wallet Modal（保留） -->
   <div id="walletModal" class="modal hidden" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="walletTitle">
       <div class="modal-head">
@@ -206,7 +249,7 @@
     </div>
   </div>
 
-  <!-- Settings Modal -->
+  <!-- Settings Modal（保留） -->
   <div id="settingsModal" class="modal hidden" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
       <div class="modal-head">
@@ -236,6 +279,44 @@
     </div>
   </div>
 
+  <!-- K-line Modal -->
+  <div id="kModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="kTitle">
+      <div class="modal-head">
+        <h3 id="kTitle">K线</h3>
+        <button class="icon-btn" id="kClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="k-toolbar">
+          <div class="seg" id="tfSeg">
+            <button data-d="1"  class="is-active">1D</button>
+            <button data-d="7">7D</button>
+            <button data-d="30">30D</button>
+            <button data-d="90">90D</button>
+            <button data-d="180">180D</button>
+            <button data-d="365">365D</button>
+            <button data-d="max">MAX</button>
+          </div>
+          <div class="seg" id="styleSeg">
+            <button data-style="solid" class="is-active">实心</button>
+            <button data-style="hollow">空心</button>
+          </div>
+          <div class="seg" id="schemeSeg">
+            <button data-s="us" class="is-active">绿涨红跌</button>
+            <button data-s="cn">红涨绿跌</button>
+          </div>
+        </div>
+
+        <div class="k-wrap">
+          <canvas id="kCanvas" class="k-canvas"></canvas>
+          <div id="kTip" class="k-tooltip hidden"></div>
+        </div>
+        <div class="k-legend" id="kLegend">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row & Card templates（略保留） -->
   <template id="row">
     <tr>
       <td class="rank num">1</td>
@@ -259,89 +340,110 @@
       <td>
         <div class="actions">
           <a class="btn" target="_blank" rel="noopener" data-role="open">🔎 <span class="i-open">详情</span></a>
+          <button class="btn" data-role="kline">📈 K线</button>
         </div>
       </td>
     </tr>
   </template>
 
+  <template id="cardItem">
+    <article class="item" role="listitem">
+      <div class="row1">
+        <div class="left">
+          <div class="rank-badge">#<span class="rank">1</span></div>
+          <div class="coin">
+            <img alt="logo" loading="lazy" referrerpolicy="no-referrer" />
+            <div>
+              <div class="name">Bitcoin</div>
+              <div class="sym">BTC</div>
+            </div>
+          </div>
+        </div>
+        <div class="price">$—</div>
+      </div>
+      <div class="row2">
+        <div class="kv"><div class="k">24h</div><div class="v chg chg24">—</div></div>
+        <div class="kv"><div class="k">7d</div><div class="v chg chg7">—</div></div>
+        <div class="kv"><div class="k">MCap</div><div class="v mcap">$—</div></div>
+        <div class="kv"><div class="k">Vol</div><div class="v vol">$—</div></div>
+      </div>
+      <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div class="actions">
+        <a class="btn" target="_blank" rel="noopener" data-role="open">🔎 <span class="i-open">详情</span></a>
+        <button class="btn" data-role="kline">📈 K线</button>
+      </div>
+    </article>
+  </template>
+
   <script>
   ;(() => {
-    /* ========= i18n ========= */
+    /* ========= i18n / state（与之前版本一致，略） ========= */
     const i18n = {
-      zh: {
-        brand:"加密市场 Top 100",
-        search_placeholder:"搜索币种 / Search…",
-        marketOverview:"市场概览",
-        refresh:"刷新",
-        gcap:"全球总市值",
-        gdelta:"24小时变动",
-        btcdom:"BTC 占比",
-        apiKeyLabel:"CoinGecko API Key",
-        apiHelp:"使用公开 Demo Key 也可以（仅限速不同）。未设置时仍可尝试回退数据。",
-        openKey:"设置 / 更换 Key",
-        col:{coin:"币种", price:"价格(USD)", mcap:"市值", d24:"24h", d7:"7d", vol:"成交额(24h)", act:"操作"},
-        connect:"连接钱包",
-        wallet:{title:"连接钱包", detected:"检测到的钱包", useMM:"使用 MetaMask", useMock:"使用模拟地址", mockNote:"用于联调的占位方案，不会产生真实链上交互。", addr:"当前地址"},
-        settings:{title:"设置", keyHelper:"建议用请求头方式（更安全）；也支持 query 参数。仅做演示存储在本地。", langLabel:"界面语言", save:"保存", clearKey:"清除 Key"},
-        open:"详情",
-        disclaimer:"* 数据源优先 CoinGecko（需 API Key），失败时退化到 CoinCap 基础数据/图标。请在真实产品中将 Key 下发到后端代理。"
+      zh:{ brand:"加密市场 Top 100",search_placeholder:"搜索币种 / Search…",marketOverview:"市场概览",refresh:"刷新",
+           gcap:"全球总市值",gdelta:"24小时变动",btcdom:"BTC 占比",
+           apiKeyLabel:"CoinGecko API Key",apiHelp:"使用公开 Demo Key 也可以（仅限速不同）。未设置时仍可尝试回退数据。",openKey:"设置 / 更换 Key",
+           col:{coin:"币种", price:"价格(USD)", mcap:"市值", d24:"24h", d7:"7d", vol:"成交额(24h)", act:"操作"},
+           connect:"连接钱包", wallet:{title:"连接钱包",detected:"检测到的钱包",useMM:"使用 MetaMask",useMock:"使用模拟地址",mockNote:"用于联调的占位方案，不会产生真实链上交互。", addr:"当前地址"},
+           settings:{title:"设置", keyHelper:"建议用请求头方式（更安全）；也支持 query 参数。仅做演示存储在本地。", langLabel:"界面语言", save:"保存", clearKey:"清除 Key"},
+           open:"详情",
+           disclaimer:"* 主数据源：CoinGecko（需 API Key；Demo 计划可用）。失败时退化到 CoinCap。生产建议将 Key 置于后端。"
       },
-      en: {
-        brand:"Crypto Market Top 100",
-        search_placeholder:"Search coins…",
-        marketOverview:"Market Overview",
-        refresh:"Refresh",
-        gcap:"Global Mkt Cap",
-        gdelta:"24h Change",
-        btcdom:"BTC Dominance",
-        apiKeyLabel:"CoinGecko API Key",
-        apiHelp:"Demo key works too (lower rate limit). Fallback data without key is attempted.",
-        openKey:"Set / Change Key",
-        col:{coin:"Coin", price:"Price(USD)", mcap:"Mkt Cap", d24:"24h", d7:"7d", vol:"Volume(24h)", act:"Action"},
-        connect:"Connect Wallet",
-        wallet:{title:"Connect Wallet", detected:"Detected Wallets", useMM:"Use MetaMask", useMock:"Use Mock Address", mockNote:"For dev only. No real on‑chain tx.", addr:"Current Address"},
-        settings:{title:"Settings", keyHelper:"Header usage recommended; query param also supported. Saved locally for demo.", langLabel:"Language", save:"Save", clearKey:"Clear Key"},
-        open:"Details",
-        disclaimer:"* Primary source: CoinGecko (requires API key). Falls back to CoinCap basics/icons if needed. In production, proxy keys via your backend."
+      en:{ brand:"Crypto Market Top 100",search_placeholder:"Search coins…",marketOverview:"Market Overview",refresh:"Refresh",
+           gcap:"Global Mkt Cap",gdelta:"24h Change",btcdom:"BTC Dominance",
+           apiKeyLabel:"CoinGecko API Key",apiHelp:"Demo key works too (lower rate limit). Fallback data is attempted.",openKey:"Set / Change Key",
+           col:{coin:"Coin", price:"Price(USD)", mcap:"Mkt Cap", d24:"24h", d7:"7d", vol:"Volume(24h)", act:"Action"},
+           connect:"Connect Wallet", wallet:{title:"Connect Wallet",detected:"Detected Wallets",useMM:"Use MetaMask",useMock:"Use Mock Address",mockNote:"For dev only. No real on‑chain tx.", addr:"Current Address"},
+           settings:{title:"Settings", keyHelper:"Header usage recommended; query also supported. Saved locally for demo.", langLabel:"Language", save:"Save", clearKey:"Clear Key"},
+           open:"Details",
+           disclaimer:"* Primary source: CoinGecko (API key required). Falls back to CoinCap. In production, proxy keys via backend."
       }
     }
     const state = {
       lang: localStorage.getItem('lang') || 'zh',
       sort: 'mcap',
       apiKey: localStorage.getItem('cg_api_key') || '',
-      cacheTTL: 60_000, // 60s markets cache
-      globalTTL: 10*60_000, // 10m global cache
-      wallet: localStorage.getItem('wallet_addr') || ''
+      cacheTTL: 60_000, globalTTL: 10*60_000,
+      wallet: localStorage.getItem('wallet_addr') || '',
+      kStyle: localStorage.getItem('k_style') || 'solid',   // 'solid' | 'hollow'
+      kScheme: localStorage.getItem('k_scheme') || 'us',    // 'us' | 'cn'
+      refChain: [] // 访问时解析 ?ref= 形成三级链
     };
     const t = (path) => path.split('.').reduce((o,k)=>o?.[k], i18n[state.lang]) ?? path;
     document.documentElement.lang = state.lang;
 
-    /* ========= DOM ========= */
-    const $ = sel => document.querySelector(sel);
+    /* ========= Referral capture（跨页记录最多3级） ========= */
+    (function captureRef(){
+      const url = new URL(location.href); const ref = url.searchParams.get('ref');
+      try{
+        const chain = JSON.parse(localStorage.getItem('ref_chain') || '[]');
+        if(ref && typeof ref === 'string'){
+          // 去重并最多3级
+          const set = new Set([ref, ...chain]);
+          const arr = Array.from(set).slice(0,3);
+          localStorage.setItem('ref_chain', JSON.stringify(arr));
+        }
+        state.refChain = JSON.parse(localStorage.getItem('ref_chain') || '[]');
+      }catch{ state.refChain = []; }
+    })();
+
+    /* ========= DOM refs ========= */
+    const $ = s => document.querySelector(s);
     const els = {
-      brand: $('#i-brand'),
-      search: $('#searchInput'),
-      clear: $('#clearSearch'),
-      langSwitch: $('#langSwitch'),
-      sortSwitch: $('#sortSwitch'),
-      refresh: $('#refreshBtn'),
-      tbody: $('#tbody'),
+      brand: $('#i-brand'), search: $('#searchInput'), clear: $('#clearSearch'),
+      langSwitch: $('#langSwitch'), sortSwitch: $('#sortSwitch'), refresh: $('#refreshBtn'),
+      tbody: $('#tbody'), cardList: $('#cardList'),
       gcap: $('#gcap'), gdelta: $('#gdelta'), btcdom: $('#btcdom'),
-      i:{ marketOverview: $('#i-marketOverview'), refresh: $('#i-refresh'), gcap: $('#i-gcap'), gdelta: $('#i-gdelta'), btcdom: $('#i-btcdom'),
-          apiKeyLabel: $('#i-apiKeyLabel'), apiHelp: $('#i-apiHelp'), openKey: $('#i-openKey'),
-          colCoin: $('#i-col-coin'), colPrice: $('#i-col-price'), colMcap: $('#i-col-mcap'), col24: $('#i-col-24h'), col7: $('#i-col-7d'), colVol: $('#i-col-vol'), colAct: $('#i-col-act'),
-          connect: $('#i-connect')
-      },
       apiKeyState: $('#apiKeyState'), openKey: $('#openKey'),
       settingsBtn: $('#settingsBtn'), settingsModal: $('#settingsModal'), settingsClose: $('#settingsClose'),
       settingsForm: $('#settingsForm'), apiKeyInput: $('#apiKeyInput'), localeSelect: $('#localeSelect'),
       btnClearKey: $('#btnClearKey'), btnSaveSettings: $('#btnSaveSettings'),
-      disclaimer: $('#i-disclaimer'),
-
       walletBtn: $('#walletBtn'), walletModal: $('#walletModal'), walletClose: $('#walletClose'),
-      btnMetaMask: $('#btnMetaMask'), btnMock: $('#btnMock'),
-      walletDetected: $('#walletDetectResult'), currAddr: $('#currentAddr'),
-      walletTitle: $('#walletTitle'), iWalletDetected: $('#i-walletDetected'), iUseMM: $('#i-useMetaMask'), iUseMock: $('#i-useMock'), iMockNote: $('#i-mockNote'), iWalletAddr: $('#i-walletAddr')
+      btnMetaMask: $('#btnMetaMask'), btnMock: $('#btnMock'), walletDetected: $('#walletDetectResult'), currAddr: $('#currentAddr'),
+
+      // K-line
+      kModal: $('#kModal'), kClose: $('#kClose'),
+      kCanvas: $('#kCanvas'), kTip: $('#kTip'), kLegend: $('#kLegend'),
+      tfSeg: $('#tfSeg'), styleSeg: $('#styleSeg'), schemeSeg: $('#schemeSeg')
     };
 
     /* ========= Utils ========= */
@@ -356,65 +458,74 @@
       for(const u of units){ if(abs>=u.k) return (n/u.k).toFixed(abs>=10*u.k?1:2)+u.s; }
       return nf({maximumFractionDigits:0}).format(n);
     };
-    const el = (html) => { const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstChild; };
 
-    /* ========= Fetch layer (with cache & fallback) ========= */
+    /* ========= Fetch layer ========= */
     const withHeaders = (init={}) => {
       const headers = new Headers(init.headers || {});
       headers.set('accept','application/json');
-      if(state.apiKey) headers.set('x-cg-demo-api-key', state.apiKey); // Demo key header
+      if(state.apiKey) headers.set('x-cg-demo-api-key', state.apiKey); // Demo Plan header
       return {...init, headers};
     };
-    const cacheGet = (k, ttl) => {
-      try{
-        const it = JSON.parse(localStorage.getItem(k) || 'null');
-        if(!it) return null;
-        if(Date.now() - it.ts > ttl) return null;
-        return it.data;
-      }catch{ return null; }
-    };
+    const cacheGet = (k, ttl) => { try{
+      const it = JSON.parse(localStorage.getItem(k) || 'null'); if(!it) return null;
+      if(Date.now() - it.ts > ttl) return null; return it.data;
+    }catch{ return null; } };
     const cacheSet = (k, data) => localStorage.setItem(k, JSON.stringify({ts:Date.now(), data}));
 
     async function getMarkets(){
-      const CK = 'cg:markets';
-      const cached = cacheGet(CK, state.cacheTTL);
-      if(cached) return cached;
-      const qs = new URLSearchParams({
-        vs_currency:'usd', order:'market_cap_desc', per_page:'100', page:'1',
-        sparkline:'true', price_change_percentage:'24h,7d'
-      });
-      // also attach query param for demo key as redundancy
+      const CK = 'cg:markets'; const cached = cacheGet(CK, state.cacheTTL); if(cached) return cached;
+      const qs = new URLSearchParams({ vs_currency:'usd', order:'market_cap_desc', per_page:'100', page:'1',
+        sparkline:'true', price_change_percentage:'24h,7d' });
       if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
       const url = `https://api.coingecko.com/api/v3/coins/markets?`+qs.toString();
       try{
-        const res = await fetch(url, withHeaders());
-        if(!res.ok) throw new Error('coingecko '+res.status);
-        const data = await res.json();
-        cacheSet(CK, data);
-        return data;
-      }catch(e){
-        console.warn('[fallback] CoinGecko failed:', e);
-        return await getMarketsFallback();
-      }
+        const res = await fetch(url, withHeaders()); if(!res.ok) throw new Error('coingecko '+res.status);
+        const data = await res.json(); cacheSet(CK, data); return data;
+      }catch(e){ console.warn('[fallback] markets failed', e); return await getMarketsFallback(); }
     }
     async function getGlobal(){
-      const CK = 'cg:global';
-      const cached = cacheGet(CK, state.globalTTL);
-      if(cached) return cached;
-      const qs = new URLSearchParams();
-      if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
+      const CK = 'cg:global'; const cached = cacheGet(CK, state.globalTTL); if(cached) return cached;
+      const qs = new URLSearchParams(); if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
       try{
         const res = await fetch(`https://api.coingecko.com/api/v3/global?${qs}`, withHeaders());
         if(!res.ok) throw new Error('coingecko-global '+res.status);
-        const data = await res.json();
-        cacheSet(CK, data);
-        return data;
-      }catch(e){
-        console.warn('[fallback] global failed:', e);
-        return null;
-      }
+        const data = await res.json(); cacheSet(CK, data); return data;
+      }catch(e){ console.warn('[fallback] global failed', e); return null; }
     }
-    // Fallback: CoinCap（基础字段 + 图标推断）
+    // OHLC（优先）
+    async function getOHLC(coinId, days){
+      const qs = new URLSearchParams({ vs_currency:'usd', days:String(days) });
+      if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
+      const url = `https://api.coingecko.com/api/v3/coins/${coinId}/ohlc?`+qs.toString(); // [t,o,h,l,c]
+      const res = await fetch(url, withHeaders());
+      if(!res.ok) throw new Error('ohlc '+res.status);
+      const arr = await res.json();
+      return arr.map(([t,o,h,l,c]) => ({ t, o, h, l, c }));
+    }
+    // 备用：用 market_chart 的 prices 聚合成 OHLC
+    async function getOHLCFromPrices(coinId, days){
+      const qs = new URLSearchParams({ vs_currency:'usd', days:String(days) });
+      if(state.apiKey) qs.set('x_cg_demo_api_key', state.apiKey);
+      const url = `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?`+qs.toString(); // {prices:[[t,p],...]}
+      const res = await fetch(url, withHeaders()); if(!res.ok) throw new Error('chart '+res.status);
+      const data = await res.json(); const prices = data.prices || [];
+      if(!prices.length) return [];
+      const t0 = prices[0][0], t1 = prices[prices.length-1][0];
+      const bins = Math.min(180, Math.max(30, Math.floor(prices.length / 10)));
+      const bucket = (t1 - t0) / bins;
+      const out = [];
+      for(let b=0;b<bins;b++){
+        const start = t0 + b*bucket, end = start + bucket;
+        const pts = prices.filter(([t]) => t>=start && t<end);
+        if(!pts.length) continue;
+        const o = pts[0][1], c = pts[pts.length-1][1];
+        let h = -Infinity, l = Infinity;
+        for(const [,p] of pts){ if(p>h) h=p; if(p<l) l=p; }
+        out.push({ t: Math.round((start+end)/2), o, h, l, c });
+      }
+      return out;
+    }
+    // Fallback markets（CoinCap基础）
     async function getMarketsFallback(){
       try{
         const res = await fetch('https://api.coincap.io/v2/assets?limit=100');
@@ -422,168 +533,290 @@
         const { data } = await res.json();
         return data.map((it, i) => ({
           market_cap_rank: i+1,
-          id: it.id,
-          symbol: it.symbol?.toLowerCase(),
-          name: it.name,
+          id: it.id, symbol: it.symbol?.toLowerCase(), name: it.name,
           image: `https://assets.coincap.io/assets/icons/${(it.symbol||'').toLowerCase()}@2x.png`,
           current_price: Number(it.priceUsd),
           market_cap: Number(it.marketCapUsd),
           total_volume: Number(it.volumeUsd24Hr),
           price_change_percentage_24h: Number(it.changePercent24Hr),
-          sparkline_in_7d: { price: [] }, // 无历史，保持字段兼容
+          sparkline_in_7d: { price: [] },
           price_change_percentage_7d_in_currency: null
         }));
-      }catch(err){
-        console.error('Fallback failed:', err);
-        return [];
-      }
+      }catch(err){ console.error('Fallback failed:', err); return []; }
     }
 
-    /* ========= Render ========= */
+    /* ========= UI文本渲染（略保留） ========= */
     function applyTexts(){
-      els.brand.textContent = t('brand');
-      els.search.placeholder = t('search_placeholder');
-      els.i.marketOverview.textContent = t('marketOverview');
-      els.i.refresh.textContent = t('refresh');
-      els.i.gcap.textContent = t('gcap');
-      els.i.gdelta.textContent = t('gdelta');
-      els.i.btcdom.textContent = t('btcdom');
-      $('#i-apiKeyLabel').textContent = t('apiKeyLabel');
-      $('#i-apiHelp').textContent = t('apiHelp');
-      $('#i-openKey').textContent = t('openKey');
-      $('#i-col-coin').textContent = t('col.coin');
-      $('#i-col-price').textContent = t('col.price');
-      $('#i-col-mcap').textContent = t('col.mcap');
-      $('#i-col-24h').textContent = t('col.d24');
-      $('#i-col-7d').textContent = t('col.d7');
-      $('#i-col-vol').textContent = t('col.vol');
-      $('#i-col-act').textContent = t('col.act');
-      els.i.connect.textContent = t('connect');
-      $('#settingsTitle').textContent = t('settings.title');
-      $('#i-keyHelper').textContent = t('settings.keyHelper');
-      $('#i-langLabel').textContent = t('settings.langLabel');
-      els.btnSaveSettings.textContent = t('settings.save');
-      els.btnClearKey.textContent = t('settings.clearKey');
-      // wallet texts
-      $('#walletTitle').textContent = t('wallet.title');
-      $('#i-walletDetected').textContent = t('wallet.detected');
-      $('#i-useMetaMask').textContent = t('wallet.useMM');
-      $('#i-useMock').textContent = t('wallet.useMock');
-      $('#i-mockNote').textContent = t('wallet.mockNote');
-      $('#i-walletAddr').textContent = t('wallet.addr');
+      $('#i-brand').textContent = t('brand'); $('#searchInput').placeholder = t('search_placeholder');
+      $('#i-marketOverview').textContent = t('marketOverview'); $('#i-refresh').textContent = t('refresh');
+      $('#i-gcap').textContent = t('gcap'); $('#i-gdelta').textContent = t('gdelta'); $('#i-btcdom').textContent = t('btcdom');
+      $('#i-apiKeyLabel').textContent = t('apiKeyLabel'); $('#i-apiHelp').textContent = t('apiHelp'); $('#i-openKey').textContent = t('openKey');
+      $('#i-col-coin').textContent = t('col.coin'); $('#i-col-price').textContent = t('col.price');
+      $('#i-col-mcap').textContent = t('col.mcap'); $('#i-col-24h').textContent = t('col.d24');
+      $('#i-col-7d').textContent = t('col.d7'); $('#i-col-vol').textContent = t('col.vol'); $('#i-col-act').textContent = t('col.act');
       document.querySelectorAll('.i-open').forEach(n=>n.textContent = t('open'));
-      els.disclaimer.textContent = t('disclaimer');
+      document.querySelector('#i-disclaimer').textContent = t('disclaimer');
       document.documentElement.lang = state.lang;
     }
-
     function renderGlobal(glob){
       if(!glob?.data){ els.gcap.textContent='—'; els.gdelta.textContent='—'; els.btcdom.textContent='—'; return; }
-      const d = glob.data;
-      const cap = d.total_market_cap?.usd;
-      const delta = d.market_cap_change_percentage_24h_usd;
-      const btc = d.market_cap_percentage?.btc;
-      els.gcap.textContent = fmtUSD(cap);
-      els.gdelta.textContent = fmtPct(delta);
-      els.gdelta.className = 'v delta ' + (delta>=0?'up':'down');
-      els.btcdom.textContent = (btc!=null? nf({maximumFractionDigits:2}).format(btc) + '%' : '—');
+      const d = glob.data; const cap = d.total_market_cap?.usd; const delta = d.market_cap_change_percentage_24h_usd; const btc = d.market_cap_percentage?.btc;
+      els.gcap.textContent = fmtUSD(cap); els.gdelta.textContent = fmtPct(delta); els.gdelta.className = 'v delta ' + (delta>=0?'up':'down');
+      els.btcdom.textContent = (btc!=null? nf({maximumFractionDigits:2}).format(btc)+'%' : '—');
     }
 
+    /* ========= Sparkline（保留） ========= */
     function drawSpark(svg, prices){
-      const w = 120, h = 36, pad=2;
-      svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
-      svg.innerHTML = '';
-      if(!prices || prices.length<2) return;
+      const w = 120, h = 36, pad=2; svg.setAttribute('viewBox',`0 0 ${w} ${h}`); svg.innerHTML = ''; if(!prices || prices.length<2) return;
       const min = Math.min(...prices), max = Math.max(...prices);
       const xs = prices.map((_,i)=> pad + (i*(w-2*pad)/(prices.length-1)));
-      const ys = prices.map(v => {
-        if(max===min) return h/2;
-        return pad + (h-2*pad) - ( (v-min)/(max-min) * (h-2*pad) );
-      });
+      const ys = prices.map(v => max===min? h/2 : pad + (h-2*pad) - ((v-min)/(max-min)*(h-2*pad)));
       const d = xs.map((x,i)=> `${i?'L':'M'}${x.toFixed(2)},${ys[i].toFixed(2)}`).join(' ');
       const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('d', d);
-      path.setAttribute('fill','none'); path.setAttribute('stroke','currentColor'); path.setAttribute('stroke-width','1.5');
+      path.setAttribute('d', d); path.setAttribute('fill','none'); path.setAttribute('stroke','currentColor'); path.setAttribute('stroke-width','1.5');
       svg.appendChild(path);
     }
 
-    function renderRows(data){
+    /* ========= 列表渲染 ========= */
+    function bySearch(kw){ if(!kw) return ()=>true; kw=kw.trim().toLowerCase(); return p => (p.name?.toLowerCase().includes(kw) || p.symbol?.toLowerCase().includes(kw)); }
+    const sorters = { mcap:(a,b)=>(b.market_cap??0)-(a.market_cap??0), price:(a,b)=>(b.current_price??0)-(a.current_price??0), change24h:(a,b)=>(b.price_change_percentage_24h??-1e9)-(a.price_change_percentage_24h??-1e9) };
+
+    function renderTableRows(data){
       els.tbody.innerHTML = '';
-      const tpl = document.getElementById('row');
-      const frag = document.createDocumentFragment();
+      const tpl = document.getElementById('row'); const frag = document.createDocumentFragment();
       data.forEach((p,idx)=>{
         const node = tpl.content.cloneNode(true);
         node.querySelector('.rank').textContent = p.market_cap_rank ?? (idx+1);
         const img = node.querySelector('img');
         img.src = p.image || `https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`;
         img.alt = `${p.name} logo`;
-        node.querySelector('.name').textContent = p.name;
-        node.querySelector('.sym').textContent = (p.symbol || '').toUpperCase();
-
+        img.onerror = () => { img.onerror=null; img.src=`https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`; };
+        node.querySelector('.name').textContent = p.name; node.querySelector('.sym').textContent = (p.symbol || '').toUpperCase();
         node.querySelector('.price').textContent = fmtUSD(p.current_price);
         node.querySelector('.mcap').textContent = '$'+ shortNum(p.market_cap);
-        const c24 = p.price_change_percentage_24h;
-        const el24 = node.querySelector('.chg24'); el24.textContent = fmtPct(c24); el24.classList.add(c24>=0?'up':'down');
-
-        // 7d pct（在 markets 接口 price_change_percentage=7d 时可从扩展字段读取；不同库字段名可能不同）
+        const c24 = p.price_change_percentage_24h; const el24 = node.querySelector('.chg24'); el24.textContent = fmtPct(c24); el24.classList.add(c24>=0?'up':'down');
         const c7 = p.price_change_percentage_7d_in_currency ?? p.price_change_percentage_7d ?? null;
         const el7 = node.querySelector('.chg7'); el7.textContent = c7==null? '—' : fmtPct(c7); el7.classList.add(c7>=0?'up':'down');
-
-        // sparkline
-        const prices = p.sparkline_in_7d?.price;
-        drawSpark(node.querySelector('.spark'), prices);
-
+        drawSpark(node.querySelector('.spark'), p.sparkline_in_7d?.price);
         node.querySelector('.vol').textContent = '$'+ shortNum(p.total_volume);
-
-        // action: link to CoinGecko coin page
         const loc = state.lang==='zh' ? 'zh' : 'en';
         node.querySelector('[data-role="open"]').href = `https://www.coingecko.com/${loc}/coins/${p.id}`;
-
+        // K线按钮
+        node.querySelector('[data-role="kline"]').addEventListener('click', ()=> openKModal(p));
         frag.appendChild(node);
       });
       els.tbody.appendChild(frag);
     }
 
-    /* ========= Filters & sort ========= */
-    function bySearch(kw){
-      if(!kw) return () => true;
-      kw = kw.trim().toLowerCase();
-      return p => (p.name?.toLowerCase().includes(kw) || p.symbol?.toLowerCase().includes(kw));
+    function renderCards(data){
+      els.cardList.innerHTML = '';
+      const tpl = document.getElementById('cardItem'); const frag = document.createDocumentFragment();
+      data.forEach((p,idx)=>{
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.rank').textContent = p.market_cap_rank ?? (idx+1);
+        const img = node.querySelector('img');
+        img.src = p.image || `https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`;
+        img.alt = `${p.name} logo`;
+        img.onerror = () => { img.onerror=null; img.src=`https://assets.coincap.io/assets/icons/${(p.symbol||'').toLowerCase()}@2x.png`; };
+        node.querySelector('.name').textContent = p.name; node.querySelector('.sym').textContent = (p.symbol || '').toUpperCase();
+        node.querySelector('.price').textContent = fmtUSD(p.current_price);
+        const c24 = p.price_change_percentage_24h; const el24 = node.querySelector('.chg24'); el24.textContent = fmtPct(c24); el24.classList.add(c24>=0?'up':'down');
+        const c7 = p.price_change_percentage_7d_in_currency ?? p.price_change_percentage_7d ?? null;
+        node.querySelector('.chg7').textContent = c7==null? '—' : fmtPct(c7);
+        node.querySelector('.mcap').textContent = '$'+ shortNum(p.market_cap);
+        node.querySelector('.vol').textContent = '$'+ shortNum(p.total_volume);
+        drawSpark(node.querySelector('.spark'), p.sparkline_in_7d?.price);
+        const loc = state.lang==='zh' ? 'zh' : 'en';
+        node.querySelector('[data-role="open"]').href = `https://www.coingecko.com/${loc}/coins/${p.id}`;
+        node.querySelector('[data-role="kline"]').addEventListener('click', ()=> openKModal(p));
+        frag.appendChild(node);
+      });
+      els.cardList.appendChild(frag);
     }
-    const sorters = {
-      mcap: (a,b) => (b.market_cap??0)-(a.market_cap??0),
-      price: (a,b) => (b.current_price??0)-(a.current_price??0),
-      change24h: (a,b) => (b.price_change_percentage_24h??-1e9)-(a.price_change_percentage_24h??-1e9)
-    };
 
-    /* ========= Wallet mock ========= */
+    /* ========= Wallet（保留） ========= */
     function updateWalletUI(){
-      els.walletBtn.querySelector('span').textContent = state.wallet ? (state.wallet.slice(0,6)+'…'+state.wallet.slice(-4)) : t('connect');
-      els.currAddr.value = state.wallet || '';
+      const label = state.wallet ? (state.wallet.slice(0,6)+'…'+state.wallet.slice(-4)) : t('connect');
+      els.walletBtn.querySelector('span').textContent = label; els.currAddr.value = state.wallet || '';
     }
     async function tryMetaMask(){
-      const eth = window.ethereum;
-      if(!eth){ alert(state.lang==='zh'?'未检测到 MetaMask 或 EIP‑1193 钱包。':'No MetaMask / EIP‑1193 wallet detected.'); return; }
+      const eth = window.ethereum; if(!eth){ alert(state.lang==='zh'?'未检测到 MetaMask 或 EIP‑1193 钱包。':'No MetaMask / EIP‑1193 wallet detected.'); return; }
       try{
         const accts = await eth.request({ method:'eth_requestAccounts' });
         const addr = (accts && accts[0]) || '';
         if(addr){
           state.wallet = addr; localStorage.setItem('wallet_addr', addr);
           updateWalletUI(); closeWallet();
-          // === 预留：真实业务接入点 ===
-          // fetch('/api/wallet/connect', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ address: addr, ts: Date.now() }) })
-          console.log('[RFQ wallet] connected:', addr);
+          // 预留后端：fetch('/api/wallet/connect', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ address: addr, ts: Date.now() })})
         }
       }catch(err){ console.warn('MetaMask rejected/failed', err); }
     }
     function mockAddress(){
       const hex = Array.from(crypto.getRandomValues(new Uint8Array(20))).map(b=>b.toString(16).padStart(2,'0')).join('');
-      const addr = '0x'+hex;
-      state.wallet = addr; localStorage.setItem('wallet_addr', addr);
+      const addr = '0x'+hex; state.wallet = addr; localStorage.setItem('wallet_addr', addr);
       updateWalletUI(); closeWallet();
-      console.log('[RFQ wallet MOCK] connected:', addr);
     }
 
-    /* ========= Modals ========= */
+    /* ========= K线画布 ========= */
+    const KOPT = { padL:48, padR:12, padT:20, padB:28, gridY:5, bg:'#0000' };
+    function pxRatio(){ return Math.max(1, Math.min(2, window.devicePixelRatio || 1)); }
+    function colorSet(){
+      // 颜色方案：us=绿涨红跌；cn=红涨绿跌
+      const up = state.kScheme==='us' ? '#16a34a' : '#ef4444';
+      const dn = state.kScheme==='us' ? '#ef4444' : '#16a34a';
+      return { up, dn, wick:'#64748b', axis:'#94a3b8' };
+    }
+    function drawK(canvas, data){
+      const pr = pxRatio();
+      const ctx = canvas.getContext('2d'); const W = canvas.clientWidth, H = canvas.clientHeight;
+      canvas.width = Math.floor(W*pr); canvas.height = Math.floor(H*pr); ctx.setTransform(pr,0,0,pr,0,0);
+      ctx.clearRect(0,0,W,H); ctx.fillStyle='transparent'; ctx.fillRect(0,0,W,H);
+      if(!data?.length){ ctx.fillStyle='#94a3b8'; ctx.fillText('No OHLC data', 10, 20); return; }
+
+      const {padL,padR,padT,padB,gridY} = KOPT; const iw = W - padL - padR; const ih = H - padT - padB;
+      // y 尺度
+      let min = Infinity, max = -Infinity;
+      data.forEach(d=>{ if(d.l<min) min=d.l; if(d.h>max) max=d.h; });
+      if(!(max>min)){ max = min + 1; }
+      const y = (v)=> padT + (ih - (v - min)/(max - min) * ih);
+
+      // 网格 & 轴
+      ctx.strokeStyle = '#e5e7eb20'; ctx.lineWidth = 1;
+      for(let i=0;i<=gridY;i++){
+        const yy = padT + i*(ih/gridY);
+        ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(W - padR, yy); ctx.stroke();
+        // 价格刻度
+        const val = max - i*(max-min)/gridY; ctx.fillStyle=colorSet().axis; ctx.font='12px system-ui';
+        ctx.fillText(val.toFixed(val>100?0: val>1?2: 6), 4, yy+4);
+      }
+
+      // 计算蜡烛宽
+      const n = data.length; const cgap = 2; const cW = Math.max(3, Math.min(18, Math.floor(iw / n) - cgap));
+      // x 映射
+      const xAt = (i)=> padL + i*(cW+cgap) + Math.floor((cW)/2);
+
+      // 绘制
+      const {up, dn, wick} = colorSet();
+      ctx.lineWidth = 1;
+
+      for(let i=0;i<n;i++){
+        const d = data[i];
+        const x = xAt(i);
+        const yH = y(d.h), yL = y(d.l), yO = y(d.o), yC = y(d.c);
+        const upCandle = d.c >= d.o;
+        const bodyTop = Math.min(yO,yC), bodyH = Math.max(1, Math.abs(yC - yO));
+        // wick
+        ctx.strokeStyle = wick; ctx.beginPath(); ctx.moveTo(x, yH); ctx.lineTo(x, yL); ctx.stroke();
+        // body
+        const col = upCandle ? up : dn;
+        ctx.strokeStyle = col; ctx.fillStyle = col;
+        if(state.kStyle==='hollow' && upCandle){
+          // 空心：上涨用描边
+          ctx.strokeRect(x - cW/2, bodyTop, cW, bodyH);
+        }else{
+          ctx.fillRect(x - cW/2, bodyTop, cW, bodyH);
+          if(state.kStyle==='hollow'){ ctx.strokeRect(x - cW/2, bodyTop, cW, bodyH); }
+        }
+      }
+
+      // 右侧价轴当前范围提示
+      ctx.fillStyle=colorSet().axis; ctx.font='12px system-ui';
+      ctx.fillText(`${min.toFixed(2)} – ${max.toFixed(2)}`, padL, H-8);
+    }
+
+    // Tooltip & 交互
+    function bindKInteractions(canvas, tip, data){
+      const show = (e)=>{
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+        const {padL,padR} = KOPT; const iw = canvas.clientWidth - padL - padR;
+        const n = data.length; if(n<1) return;
+        const slot = iw / n; const i = Math.max(0, Math.min(n-1, Math.floor((x - padL) / slot)));
+        const d = data[i]; if(!d) return;
+        const date = new Date(d.t); const ds = date.toLocaleString();
+        tip.classList.remove('hidden');
+        tip.style.left = Math.min(canvas.clientWidth - 220, Math.max(0, x + 8))+'px';
+        tip.style.top = Math.max(0, y + 8)+'px';
+        tip.innerHTML = `时间 ${ds}<br>O ${d.o.toFixed(6)}  H ${d.h.toFixed(6)}  L ${d.l.toFixed(6)}  C ${d.c.toFixed(6)}`;
+      };
+      const hide = ()=> tip.classList.add('hidden');
+      canvas.onmousemove = show; canvas.onmouseleave = hide; canvas.ontouchstart = e=>{ show(e.touches[0]); }; canvas.ontouchend = hide;
+    }
+
+    // 打开K线弹窗
+    let currentCoin = null, currentDays = '1';
+    async function openKModal(coin){
+      currentCoin = coin; currentDays = '1';
+      document.getElementById('kTitle').textContent = `K线 · ${coin.name} (${coin.symbol?.toUpperCase()})`;
+      open(els.kModal); await renderK();
+    }
+    async function renderK(){
+      const id = currentCoin.id; const days = currentDays;
+      let ohlc = [];
+      try{
+        ohlc = await getOHLC(id, days); // 官方 OHLC 接口
+      }catch(e){
+        console.warn('OHLC failed, fallback to market_chart -> synth candles', e);
+        ohlc = await getOHLCFromPrices(id, days); // 退化用价格聚合
+      }
+      drawK(els.kCanvas, ohlc);
+      els.kLegend.textContent = `数据源：${ohlc.length?'CoinGecko OHLC / 聚合':''} · 周期 ${String(days).toUpperCase()}`;
+      bindKInteractions(els.kCanvas, els.kTip, ohlc);
+    }
+
+    /* ========= Events ========= */
+    // 多语言 / 排序 / 搜索 / 刷新（与之前相同，略）
+    els.langSwitch.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-lang]'); if(!btn) return;
+      [...els.langSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
+      state.lang = btn.dataset.lang; localStorage.setItem('lang', state.lang);
+      applyTexts(); render(true);
+    });
+    els.sortSwitch.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button[data-sort]'); if(!btn) return;
+      [...els.sortSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
+      state.sort = btn.dataset.sort; render();
+    });
+    $('#searchInput').addEventListener('input', render);
+    $('#clearSearch').addEventListener('click', ()=>{ $('#searchInput').value=''; render(); });
+    $('#refreshBtn').addEventListener('click', async()=>{ localStorage.removeItem('cg:markets'); await render(true); });
+
+    // Settings
+    $('#settingsBtn').addEventListener('click', openSettings); $('#openKey').addEventListener('click', openSettings);
+    $('#settingsClose').addEventListener('click', closeSettings);
+    $('#settingsForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      state.apiKey = $('#apiKeyInput').value.trim(); localStorage.setItem('cg_api_key', state.apiKey);
+      state.lang = $('#localeSelect').value; localStorage.setItem('lang', state.lang);
+      els.apiKeyState.textContent = state.apiKey ? '已设置' : '未设置';
+      applyTexts(); closeSettings(); render(true);
+    });
+    $('#btnClearKey').addEventListener('click', ()=>{ state.apiKey=''; localStorage.removeItem('cg_api_key'); els.apiKeyState.textContent='未设置'; });
+
+    // Wallet
+    $('#walletBtn').addEventListener('click', openWallet); $('#walletClose').addEventListener('click', closeWallet);
+    $('#btnMetaMask').addEventListener('click', tryMetaMask); $('#btnMock').addEventListener('click', mockAddress);
+
+    // K线：周期/样式/方案切换
+    $('#kClose').addEventListener('click', ()=> close(els.kModal));
+    $('#tfSeg').addEventListener('click', async (e)=>{
+      const b = e.target.closest('button[data-d]'); if(!b) return;
+      [...els.tfSeg.children].forEach(x=>x.classList.remove('is-active')); b.classList.add('is-active');
+      currentDays = b.dataset.d; await renderK();
+    });
+    $('#styleSeg').addEventListener('click', (e)=>{
+      const b = e.target.closest('button[data-style]'); if(!b) return;
+      [...els.styleSeg.children].forEach(x=>x.classList.remove('is-active')); b.classList.add('is-active');
+      state.kStyle = b.dataset.style; localStorage.setItem('k_style', state.kStyle); renderK();
+    });
+    $('#schemeSeg').addEventListener('click', (e)=>{
+      const b = e.target.closest('button[data-s]'); if(!b) return;
+      [...els.schemeSeg.children].forEach(x=>x.classList.remove('is-active')); b.classList.add('is-active');
+      state.kScheme = b.dataset.s; localStorage.setItem('k_scheme', state.kScheme); renderK();
+    });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ close(els.kModal); closeSettings(); closeWallet(); } });
+
+    /* ========= Init ========= */
     function open(el){ el.classList.remove('hidden'); el.setAttribute('aria-hidden','false'); }
     function close(el){ el.classList.add('hidden'); el.setAttribute('aria-hidden','true'); }
     function openWallet(){ open(els.walletModal); els.walletDetected.textContent = window.ethereum ? 'MetaMask (EIP‑1193) 可用' : '未检测到浏览器钱包'; }
@@ -591,56 +824,24 @@
     function openSettings(){ els.apiKeyInput.value = state.apiKey; els.localeSelect.value = state.lang; open(els.settingsModal); }
     function closeSettings(){ close(els.settingsModal); }
 
-    /* ========= Events ========= */
-    els.langSwitch.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-lang]'); if(!btn) return;
-      [...els.langSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
-      state.lang = btn.dataset.lang; localStorage.setItem('lang', state.lang); applyTexts(); render(); 
-    });
-    els.sortSwitch.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button[data-sort]'); if(!btn) return;
-      [...els.sortSwitch.children].forEach(b=>b.classList.remove('is-active')); btn.classList.add('is-active');
-      state.sort = btn.dataset.sort; render();
-    });
-    els.search.addEventListener('input', render);
-    els.clear.addEventListener('click', ()=>{ els.search.value=''; render(); });
-    els.refresh.addEventListener('click', async()=>{ localStorage.removeItem('cg:markets'); await render(true); });
-
-    // settings
-    els.settingsBtn.addEventListener('click', openSettings); els.openKey.addEventListener('click', openSettings);
-    els.settingsClose.addEventListener('click', closeSettings);
-    els.settingsForm.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      state.apiKey = els.apiKeyInput.value.trim(); localStorage.setItem('cg_api_key', state.apiKey);
-      state.lang = els.localeSelect.value; localStorage.setItem('lang', state.lang);
-      els.apiKeyState.textContent = state.apiKey ? '已设置' : '未设置';
-      applyTexts(); closeSettings(); render(true);
-    });
-    els.btnClearKey.addEventListener('click', ()=>{ state.apiKey=''; localStorage.removeItem('cg_api_key'); els.apiKeyState.textContent='未设置'; });
-
-    // wallet
-    els.walletBtn.addEventListener('click', openWallet); els.walletClose.addEventListener('click', closeWallet);
-    els.btnMetaMask.addEventListener('click', tryMetaMask); els.btnMock.addEventListener('click', mockAddress);
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeWallet(); closeSettings(); } });
-
-    /* ========= Main render ========= */
-    async function render(force=false){
-      applyTexts();
-      els.apiKeyState.textContent = state.apiKey ? (state.lang==='zh'?'已设置':'Set') : (state.lang==='zh'?'未设置':'Not set');
-      updateWalletUI();
-      if(force){ localStorage.removeItem('cg:markets'); }
-      const [glob, marketsRaw] = await Promise.all([getGlobal(), getMarkets()]);
+    function applyLangActive(){ [...els.langSwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.lang === state.lang)); }
+    function renderGlobalAndList(glob, markets){
       renderGlobal(glob);
-      // filter/sort
-      const kw = els.search.value;
-      const data = marketsRaw.filter(bySearch(kw)).sort(sorters[state.sort]);
-      renderRows(data);
+      const kw = $('#searchInput').value;
+      const data = markets.filter(bySearch(kw)).sort(sorters[state.sort]);
+      renderTableRows(data); renderCards(data);
     }
 
-    // init
-    ;[...els.langSwitch.children].forEach(b => b.classList.toggle('is-active', b.dataset.lang === state.lang));
-    els.apiKeyState.textContent = state.apiKey ? '已设置' : '未设置';
+    async function render(force=false){
+      applyTexts(); els.apiKeyState.textContent = state.apiKey ? (state.lang==='zh'?'已设置':'Set') : (state.lang==='zh'?'未设置':'Not set');
+      updateWalletUI(); applyLangActive(); if(force){ localStorage.removeItem('cg:markets'); }
+      const [glob, markets] = await Promise.all([getGlobal(), getMarkets()]);
+      renderGlobalAndList(glob, markets);
+    }
+
     render();
+    // 响应式重绘（避免频繁）
+    let tid; window.addEventListener('resize', ()=>{ clearTimeout(tid); tid=setTimeout(()=>{ if(!els.kModal.classList.contains('hidden')) renderK(); }, 200); });
   })();
   </script>
 </body>
