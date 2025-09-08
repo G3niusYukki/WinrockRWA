@@ -57,6 +57,7 @@ npm install   # 或 yarn install
 RPC_URL=https://your-rpc-endpoint
 PRIVATE_KEY=your-wallet-private-key
 ORACLE_API_KEY=your-oracle-api-key
+COINMARKETCAP_API_KEY=your-coinmarketcap-api-key
 ```
 
 ### 4. 部署合约
