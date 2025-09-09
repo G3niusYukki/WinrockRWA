@@ -44,3 +44,42 @@ body {
     transform: translateY(0);
   }
 }
+.crypto-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.crypto-icon-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  animation: orbit var(--duration) linear infinite;
+  transform-origin: center;
+}
+
+.crypto-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  transform: translateX(var(--distance));
+  opacity: 0.85;
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(var(--start));
+  }
+  to {
+    transform: rotate(calc(var(--start) + 360deg));
+  }
+}
