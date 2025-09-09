@@ -76,7 +76,7 @@ export default function Home() {
           >
             <a
               className="px-8 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition-colors"
-              href="#start"
+              href="/launchapp"
             >
               Launch App
             </a>
