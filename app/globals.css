@@ -83,3 +83,11 @@ body {
     transform: rotate(calc(var(--start) + 360deg));
   }
 }
+
+/* Optimize clarity for high-DPI mobile displays */
+@media (min-resolution: 2dppx) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
