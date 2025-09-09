@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import { useState } from "react";
+import CryptoBackground from "./components/CryptoBackground";
 
 export default function Home() {
   const [symbol, setSymbol] = useState("");
@@ -37,8 +38,9 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-black to-slate-900 text-gray-100">
-      <header className="max-w-6xl mx-auto flex items-center justify-between p-6">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-indigo-950 via-black to-slate-900 text-gray-100">
+      <CryptoBackground />
+      <header className="relative z-10 max-w-6xl mx-auto flex items-center justify-between p-6">
         <h1 className="text-2xl font-bold">Winrock RWA</h1>
         <nav className="flex gap-6 text-sm">
           <a href="#features" className="hover:text-indigo-400 transition-colors">
@@ -59,7 +61,7 @@ export default function Home() {
         </button>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6">
+      <main className="relative z-10 max-w-6xl mx-auto px-6">
         <section className="py-24 text-center">
           <h2 className="fade-in-up text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-fuchsia-500">
             Tokenize Real World Assets
@@ -124,7 +126,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="text-center py-10 text-sm text-indigo-100/60">
+      <footer className="relative z-10 text-center py-10 text-sm text-indigo-100/60">
         © {new Date().getFullYear()} Winrock RWA. All rights reserved.
       </footer>
     </div>
