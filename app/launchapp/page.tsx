@@ -59,10 +59,12 @@ export default function LaunchAppPage() {
             <tr key={coin.id} className="border-t border-white/10">
               <td className="py-2 px-4">{index + 1}</td>
               <td className="py-2 px-4">
-                <div className="flex items-center gap-2">
-                  <Image src={coin.image} alt={coin.name} width={20} height={20} />
-                  <span>{coin.name}</span>
-                  <span className="text-xs text-white/50">{coin.symbol.toUpperCase()}</span>
+<div className="flex items-center gap-2">
+  <Image src={coin.image} alt={coin.name} width={20} height={20} />
+  <span>{coin.name}</span>
+  <span className="text-xs text-white/50">{coin.symbol.toUpperCase()}</span>
+</div>
+
                 </div>
               </td>
               <td className="py-2 px-4">${coin.current_price.toLocaleString()}</td>
