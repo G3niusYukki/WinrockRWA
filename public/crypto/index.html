@@ -395,20 +395,20 @@
       wallet: localStorage.getItem('wallet_addr') || '',
       kStyle: localStorage.getItem('k_style') || 'solid',   // 'solid' | 'hollow'
       kScheme: localStorage.getItem('k_scheme') || 'us',    // 'us' | 'cn'
-      refChain: [] // 访问时解析 ?ref= 形成三级链
+      refChain: [] // 访问时解析 ?ref= 形成最多 2 级链
     };
     const t = (path) => path.split('.').reduce((o,k)=>o?.[k], i18n[state.lang]) ?? path;
     document.documentElement.lang = state.lang;
 
-    /* ========= Referral capture（跨页记录最多3级） ========= */
+      /* ========= Referral capture（跨页记录最多2级） ========= */
     (function captureRef(){
       const url = new URL(location.href); const ref = url.searchParams.get('ref');
       try{
         const chain = JSON.parse(localStorage.getItem('ref_chain') || '[]');
         if(ref && typeof ref === 'string'){
-          // 去重并最多3级
+          // 去重并最多2级
           const set = new Set([ref, ...chain]);
-          const arr = Array.from(set).slice(0,3);
+          const arr = Array.from(set).slice(0,2);
           localStorage.setItem('ref_chain', JSON.stringify(arr));
         }
         state.refChain = JSON.parse(localStorage.getItem('ref_chain') || '[]');
