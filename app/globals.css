@@ -83,3 +83,14 @@ body {
     transform: rotate(calc(var(--start) + 360deg));
   }
 }
+
+@media (min-resolution: 2dppx) {
+  /* Adjust base font sizes for crisp rendering on high-DPI displays */
+  html:lang(en) {
+    font-size: 16px;
+  }
+
+  html:lang(zh) {
+    font-size: 17px;
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 type Lang = "en" | "zh";
 
@@ -91,6 +91,10 @@ const LanguageContext = createContext<LangContextProps | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLang] = useState<Lang>("en");
+  useEffect(() => {
+    // Keep the document language attribute in sync for language-specific styling
+    document.documentElement.lang = lang;
+  }, [lang]);
   const toggleLang = () => setLang((l) => (l === "en" ? "zh" : "en"));
   const t = (key: TranslationKey) => translations[lang][key];
   return (
