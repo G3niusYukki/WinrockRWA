@@ -44,6 +44,18 @@ export default function Home() {
           <a href="#community" className="hover:text-indigo-400 transition-colors">
             {t("navCommunity")}
           </a>
+          <a
+            href="/affiliate/index.html"
+            className="hover:text-indigo-400 transition-colors"
+          >
+            {t("navAffiliate")}
+          </a>
+          <a
+            href="/crypto/index.html"
+            className="hover:text-indigo-400 transition-colors"
+          >
+            {t("navCrypto")}
+          </a>
           <a href="/admin" className="hover:text-indigo-400 transition-colors">
             {t("navAdmin")}
           </a>
