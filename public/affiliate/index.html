@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>邀请返利 · 三级分销</title>
+  <title>邀请返利 · 平台-一级用户-二级用户</title>
   <meta name="color-scheme" content="dark">
   <style>
     :root{
@@ -35,69 +35,165 @@
 </head>
 <body>
   <div class="container">
-    <h1>🤝 邀请返利 · 三级分销</h1>
-    <p class="muted">这是前端演示：生成邀请码、记录最多 3 级上级、计算返利。生产环境请接入后端风控与结算。</p>
+    <button id="langToggle" class="btn" style="float:right">English</button>
+    <h1 data-t="heading">🤝 邀请返利 · 平台-一级用户-二级用户</h1>
+    <p class="muted" data-t="demoDesc">这是前端演示：生成邀请码、记录最多 2 级上级、计算返利。生产环境请接入后端风控与结算。</p>
 
     <!-- 我的邀请码 -->
     <div class="card">
-      <h3>我的邀请码</h3>
+      <h3 data-t="myCode">我的邀请码</h3>
       <div class="row">
-        <label>邀请码 / 邀请地址</label>
+        <label id="labelCode">邀请码 / 邀请地址</label>
         <input id="myCode" class="mono" readonly />
-        <button class="btn" id="genCode">重新生成</button>
+        <button class="btn" id="genCode" data-t="regenerate">重新生成</button>
       </div>
       <div class="row" style="margin-top:10px">
-        <label>邀请链接</label>
+        <label id="labelLink">邀请链接</label>
         <input id="inviteLink" class="mono" readonly />
-        <button class="btn primary" id="copyLink">复制链接</button>
+        <button class="btn primary" id="copyLink" data-t="copyLink">复制链接</button>
       </div>
-      <div class="muted" style="margin-top:6px">默认以**已连接钱包地址**作为邀请码；如未连接，则使用本地随机码。链接形如：<code class="mono">/crypto/index.html?ref=你的码</code></div>
+      <div class="muted" id="noteLink" style="margin-top:6px">默认以<strong>已连接钱包地址</strong>作为邀请码；如未连接，则使用本地随机码。链接形如：<code class="mono">/crypto/index.html?ref=你的码</code></div>
       <div class="sep"></div>
       <div class="row">
-        <a class="btn" href="/crypto/index.html">去市场页</a>
-        <button class="btn" id="simulateChild">添加测试下级（本地）</button>
+        <a class="btn" href="/crypto/index.html" id="linkMarket">去市场页</a>
+        <button class="btn" id="simulateChild" data-t="addChild">添加测试下级（本地）</button>
       </div>
     </div>
 
     <!-- 上级链 -->
     <div class="card">
-      <h3>我的上级链（最多 3 级）</h3>
+      <h3 data-t="uplineTitle">我的上级链（最多 2 级）</h3>
       <div id="upline" class="list"></div>
       <div class="row" style="margin-top:8px">
-        <button class="btn" id="clearChain">清除本地上级链</button>
+        <button class="btn" id="clearChain" data-t="clearChain">清除本地上级链</button>
       </div>
     </div>
 
     <!-- 返利规则与结算器 -->
     <div class="card">
-      <h3>返利规则 & 模拟结算</h3>
+      <h3 data-t="calcTitle">返利规则 & 模拟结算</h3>
       <div class="grid">
         <div>
-          <div class="row"><label>平台费率</label><input id="feeRate" type="number" step="0.01" value="0.20" /> <span>%</span></div>
-          <div class="row"><label>L1 返利</label><input id="r1" type="number" step="0.1" value="30" /> <span>%</span></div>
-          <div class="row"><label>L2 返利</label><input id="r2" type="number" step="0.1" value="10" /> <span>%</span></div>
-          <div class="row"><label>L3 返利</label><input id="r3" type="number" step="0.1" value="5" /> <span>%</span></div>
+          <div class="row"><label id="labelFeeRate">平台费率</label><input id="feeRate" type="number" step="0.01" value="0.20" /> <span>%</span></div>
+          <div class="row"><label id="labelR1">一级返利</label><input id="r1" type="number" step="0.1" value="30" /> <span>%</span></div>
+          <div class="row"><label id="labelR2">二级返利</label><input id="r2" type="number" step="0.1" value="10" /> <span>%</span></div>
         </div>
         <div>
-          <div class="row"><label>订单金额</label><input id="orderAmt" type="number" step="0.01" value="1000" /> <span>USD</span></div>
-          <div class="row"><button class="btn primary" id="calc">计算</button></div>
+          <div class="row"><label id="labelOrderAmt">订单金额</label><input id="orderAmt" type="number" step="0.01" value="1000" /> <span>USD</span></div>
+          <div class="row"><button class="btn primary" id="calc" data-t="calc">计算</button></div>
           <div id="result" class="list"></div>
         </div>
       </div>
-      <div class="muted" style="margin-top:6px">示例：若订单 1000 USD、平台费率 0.2%，则平台费 2 USD；按 30/10/5% 返利，L1/L2/L3 分别为 0.60/0.20/0.10 USD。</div>
+      <div class="muted" id="example" style="margin-top:6px">示例：若订单 1000 USD、平台费率 0.2%，则平台费 2 USD；按 30/10% 返利，平台/一级/二级分别为 1.20/0.60/0.20 USD。</div>
     </div>
 
     <!-- 我的下级（本地模拟） -->
     <div class="card">
-      <h3>我的下级（本地演示）</h3>
+      <h3 data-t="downlineTitle">我的下级（本地演示）</h3>
       <div id="downline" class="list"></div>
-      <div class="muted">仅在本地保存用于演示。真实环境需后端存储、反作弊、结算与导出。</div>
+      <div class="muted" data-t="downlineNote">仅在本地保存用于演示。真实环境需后端存储、反作弊、结算与导出。</div>
     </div>
   </div>
 
   <script>
   ;(()=> {
     const $ = s => document.querySelector(s);
+    const i18n = {
+      zh:{
+        pageTitle:'邀请返利 · 平台-一级用户-二级用户',
+        heading:'🤝 邀请返利 · 平台-一级用户-二级用户',
+        demoDesc:'这是前端演示：生成邀请码、记录最多 2 级上级、计算返利。生产环境请接入后端风控与结算。',
+        myCode:'我的邀请码',
+        labelCode:'邀请码 / 邀请地址',
+        regenerate:'重新生成',
+        labelLink:'邀请链接',
+        copyLink:'复制链接',
+        copySuccess:'已复制',
+        copyFail:'复制失败',
+        noteLink:'默认以<strong>已连接钱包地址</strong>作为邀请码；如未连接，则使用本地随机码。链接形如：<code class="mono">/crypto/index.html?ref=你的码</code>',
+        linkMarket:'去市场页',
+        addChild:'添加测试下级（本地）',
+        uplineTitle:'我的上级链（最多 2 级）',
+        noUpline:'暂无上级记录（通过他人邀请链接访问将自动记录）。',
+        clearChain:'清除本地上级链',
+        calcTitle:'返利规则 & 模拟结算',
+        feeRate:'平台费率',
+        r1:'一级返利',
+        r2:'二级返利',
+        orderAmount:'订单金额',
+        calc:'计算',
+        example:'示例：若订单 1000 USD、平台费率 0.2%，则平台费 2 USD；按 30/10% 返利，平台/一级/二级分别为 1.20/0.60/0.20 USD。',
+        downlineTitle:'我的下级（本地演示）',
+        downlineNote:'仅在本地保存用于演示。真实环境需后端存储、反作弊、结算与导出。',
+        noDownline:'暂无下级（点击「添加测试下级」本地造数）。',
+        tagPlatform:'平台',
+        tagL1:'一级用户',
+        tagL2:'二级用户',
+        tagL1Short:'一级',
+        btnLang:'English'
+      },
+      en:{
+        pageTitle:'Affiliate Rebate · Platform-Level1-Level2',
+        heading:'🤝 Affiliate Rebate · Platform-Level1-Level2',
+        demoDesc:'Front-end demo: generate invite codes, record up to 2 uplines, and compute rebates. In production, connect backend risk control and settlement.',
+        myCode:'My Invite Code',
+        labelCode:'Invite Code / Address',
+        regenerate:'Regenerate',
+        labelLink:'Invite Link',
+        copyLink:'Copy Link',
+        copySuccess:'Copied',
+        copyFail:'Copy failed',
+        noteLink:'By default, the <strong>connected wallet address</strong> is used as the invite code; if not connected, a local random code is used. Link format: <code class="mono">/crypto/index.html?ref=YOURCODE</code>',
+        linkMarket:'Go to Market',
+        addChild:'Add Test Downline (local)',
+        uplineTitle:'My Upline Chain (max 2 levels)',
+        noUpline:'No upline recorded (visit via someone else\'s invite link to capture).',
+        clearChain:'Clear Local Upline Chain',
+        calcTitle:'Rebate Rules & Simulator',
+        feeRate:'Platform Fee Rate',
+        r1:'Level 1 Rebate',
+        r2:'Level 2 Rebate',
+        orderAmount:'Order Amount',
+        calc:'Calculate',
+        example:'Example: if order is 1000 USD and platform fee rate is 0.2%, platform fee is 2 USD; with 30/10% rebates, platform/L1/L2 receive 1.20/0.60/0.20 USD respectively.',
+        downlineTitle:'My Downline (local demo)',
+        downlineNote:'Stored locally for demo only. Real systems need backend storage, anti-cheat, settlement and export.',
+        noDownline:'No downline (click "Add Test Downline" to mock).',
+        tagPlatform:'Platform',
+        tagL1:'Level 1 User',
+        tagL2:'Level 2 User',
+        tagL1Short:'L1',
+        btnLang:'中文'
+      }
+    };
+    let lang = localStorage.getItem('affiliate_lang') || 'zh';
+    document.documentElement.lang = lang;
+    const t = k => i18n[lang][k] || k;
+    function applyTexts(){
+      $('#langToggle').textContent = t('btnLang');
+      document.title = t('pageTitle');
+      $('[data-t="heading"]').textContent = t('heading');
+      $('[data-t="demoDesc"]').innerHTML = t('demoDesc');
+      $('[data-t="myCode"]').textContent = t('myCode');
+      $('#labelCode').textContent = t('labelCode');
+      $('#genCode').textContent = t('regenerate');
+      $('#labelLink').textContent = t('labelLink');
+      $('#copyLink').textContent = t('copyLink');
+      $('#noteLink').innerHTML = t('noteLink');
+      $('#linkMarket').textContent = t('linkMarket');
+      $('#simulateChild').textContent = t('addChild');
+      $('[data-t="uplineTitle"]').textContent = t('uplineTitle');
+      $('#clearChain').textContent = t('clearChain');
+      $('#labelFeeRate').textContent = t('feeRate');
+      $('#labelR1').textContent = t('r1');
+      $('#labelR2').textContent = t('r2');
+      $('#labelOrderAmt').textContent = t('orderAmount');
+      $('#calc').textContent = t('calc');
+      $('#example').textContent = t('example');
+      $('[data-t="downlineTitle"]').textContent = t('downlineTitle');
+      $('[data-t="downlineNote"]').textContent = t('downlineNote');
+    }
+
     // 读取钱包地址作为默认邀请码
     const wallet = localStorage.getItem('wallet_addr') || '';
     function randomCode(){ return Array.from(crypto.getRandomValues(new Uint8Array(6))).map(b=>b.toString(36).slice(-1)).join('').toUpperCase(); }
@@ -117,15 +213,15 @@
       if(!ref) return;
       const old = JSON.parse(localStorage.getItem('ref_chain') || '[]');
       const set = new Set([ref, ...old]);
-      const arr = Array.from(set).filter(x=>x && x!==getMyCode()).slice(0,3);
+      const arr = Array.from(set).filter(x=>x && x!==getMyCode()).slice(0,2);
       localStorage.setItem('ref_chain', JSON.stringify(arr));
     })();
 
     function renderUpline(){
       const list = $('#upline'); list.innerHTML='';
       const chain = JSON.parse(localStorage.getItem('ref_chain') || '[]');
-      if(!chain.length){ list.innerHTML = '<div class="muted">暂无上级记录（通过他人邀请链接访问将自动记录）。</div>'; return; }
-      const names = ['L1 上级','L2 上上级','L3 第三层'];
+      if(!chain.length){ list.innerHTML = `<div class="muted">${t('noUpline')}</div>`; return; }
+      const names = [t('tagL1'), t('tagL2')];
       chain.forEach((c,i)=>{
         const div = document.createElement('div');
         div.innerHTML = `<span class="tag">${names[i]}</span> <span class="mono">${c}</span>`;
@@ -135,10 +231,10 @@
     function renderDownline(){
       const down = JSON.parse(localStorage.getItem('ref_downline') || '[]');
       const cont = $('#downline'); cont.innerHTML='';
-      if(!down.length){ cont.innerHTML='<div class="muted">暂无下级（点击「添加测试下级」本地造数）。</div>'; return; }
+      if(!down.length){ cont.innerHTML=`<div class="muted">${t('noDownline')}</div>`; return; }
       down.forEach(d=>{
         const div = document.createElement('div');
-        div.innerHTML = `<span class="tag">L1</span> <span class="mono">${d.code}</span> <span class="muted">${new Date(d.ts).toLocaleString()}</span>`;
+        div.innerHTML = `<span class="tag">${t('tagL1Short')}</span> <span class="mono">${d.code}</span> <span class="muted">${new Date(d.ts).toLocaleString()}</span>`;
         cont.appendChild(div);
       });
     }
@@ -147,7 +243,7 @@
     $('#myCode').value = getMyCode();
     $('#inviteLink').value = buildLink();
     $('#genCode').onclick = ()=>{ localStorage.removeItem('ref_my_code'); $('#myCode').value=getMyCode(); $('#inviteLink').value=buildLink(); };
-    $('#copyLink').onclick = async()=>{ try{ await navigator.clipboard.writeText($('#inviteLink').value); alert('已复制'); }catch{ alert('复制失败'); } };
+      $('#copyLink').onclick = async()=>{ try{ await navigator.clipboard.writeText($('#inviteLink').value); alert(t('copySuccess')); }catch{ alert(t('copyFail')); } };
     $('#simulateChild').onclick = ()=>{
       const arr = JSON.parse(localStorage.getItem('ref_downline') || '[]');
       arr.push({ code: 'U'+Math.random().toString(36).slice(2,8).toUpperCase(), ts: Date.now() });
@@ -155,22 +251,23 @@
       renderDownline();
     };
     $('#clearChain').onclick = ()=>{ localStorage.removeItem('ref_chain'); renderUpline(); };
+    $('#langToggle').onclick = ()=>{ lang = lang==='zh' ? 'en' : 'zh'; localStorage.setItem('affiliate_lang', lang); document.documentElement.lang = lang; applyTexts(); renderUpline(); renderDownline(); };
 
     // 结算计算器
     $('#calc').onclick = ()=>{
       const amt = Number($('#orderAmt').value||0);
       const feeRate = Number($('#feeRate').value||0)/100;
-      const r1 = Number($('#r1').value||0)/100, r2 = Number($('#r2').value||0)/100, r3 = Number($('#r3').value||0)/100;
+      const r1 = Number($('#r1').value||0)/100, r2 = Number($('#r2').value||0)/100;
       const fee = amt * feeRate;
-      const v1 = fee * r1, v2 = fee * r2, v3 = fee * r3;
+      const v1 = fee * r1, v2 = fee * r2, p = fee - v1 - v2;
       $('#result').innerHTML = `
-        <div><span class="tag">平台费</span> ${fee.toFixed(6)} USD</div>
-        <div><span class="tag">L1</span> ${v1.toFixed(6)} USD</div>
-        <div><span class="tag">L2</span> ${v2.toFixed(6)} USD</div>
-        <div><span class="tag">L3</span> ${v3.toFixed(6)} USD</div>
+        <div><span class="tag">${t('tagPlatform')}</span> ${p.toFixed(6)} USD</div>
+        <div><span class="tag">${t('tagL1')}</span> ${v1.toFixed(6)} USD</div>
+        <div><span class="tag">${t('tagL2')}</span> ${v2.toFixed(6)} USD</div>
       `;
     };
 
+    applyTexts();
     renderUpline(); renderDownline();
   })();
   </script>
