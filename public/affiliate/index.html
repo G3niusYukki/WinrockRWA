@@ -5,17 +5,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>邀请返利 · 三级分销</title>
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="dark">
   <style>
     :root{
-      --panel: color-mix(in srgb, white 82%, transparent);
-      --text:#0f172a; --muted:#475569; --border: rgba(15,23,42,.08); --brand:#2563eb;
+      --panel: rgba(17,24,39,.65);
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --border: rgba(148,163,184,.2);
+      --brand:#2563eb;
     }
-    @media (prefers-color-scheme: dark){
-      :root{ --panel: rgba(17,24,39,.65); --text:#e5e7eb; --muted:#94a3b8; --border: rgba(148,163,184,.2); }
-      body{ background:linear-gradient(180deg,#0b1220,#0d1117); }
-    }
-    body{margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Noto Sans",Arial,sans-serif; color:var(--text)}
+    body{margin:0; font:16px/1.6 Arial,Helvetica,sans-serif; color:var(--text); background:linear-gradient(135deg,#0f172a,#020617 60%,#000)}
     .container{max-width:980px; margin:0 auto; padding:20px}
     h1{margin:8px 0 12px}
     .card{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:16px; margin:12px 0}
@@ -23,12 +22,12 @@
     label{min-width:120px; color:var(--muted)}
     input,select{padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:transparent; color:inherit; min-width:220px}
     input:focus,select:focus{outline:none; box-shadow:0 0 0 3px rgba(37,99,235,.25)}
-    .btn{display:inline-flex; gap:6px; align-items:center; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#fff; cursor:pointer; font-weight:700}
+    .btn{display:inline-flex; gap:6px; align-items:center; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#0b1220; color:#e5e7eb; cursor:pointer; font-weight:700}
     .btn.primary{background:var(--brand); color:#fff; border-color:transparent}
     .grid{display:grid; gap:12px; grid-template-columns:1fr 1fr}
     @media (max-width:800px){ .grid{grid-template-columns:1fr} }
     .list{display:grid; gap:8px}
-    .tag{display:inline-flex; gap:6px; align-items:center; background:rgba(15,23,42,.06); border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px}
+    .tag{display:inline-flex; gap:6px; align-items:center; background:rgba(255,255,255,.06); border:1px solid var(--border); border-radius:999px; padding:6px 10px; font-size:12px}
     .muted{color:var(--muted); font-size:12px}
     .sep{height:1px; background:var(--border); margin:10px 0}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
