@@ -44,6 +44,9 @@ export default function Home() {
           <a href="#community" className="hover:text-indigo-400 transition-colors">
             {t("navCommunity")}
           </a>
+          <a href="/admin" className="hover:text-indigo-400 transition-colors">
+            {t("navAdmin")}
+          </a>
         </nav>
         <div className="flex items-center">
           <LanguageSwitcher />
