@@ -4,33 +4,24 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>加密市场 Top 100 / Crypto Top 100</title>
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="dark">
   <style>
-    /* ===== Design tokens（保留你已有风格，略） ===== */
+    /* ===== Design tokens ===== */
     :root{
-      --bg: radial-gradient(1200px 800px at 10% -10%, #eef5ff 0%, transparent 55%),
-            radial-gradient(1000px 700px at 90% 0%, #fff6ee 0%, transparent 45%),
-            linear-gradient(180deg, #f8fbff 0%, #f7f7fb 100%);
-      --panel: color-mix(in srgb, white 78%, transparent);
-      --card: color-mix(in srgb, white 86%, transparent);
-      --text: #0f172a; --muted:#475569; --border: rgba(15,23,42,.08);
+      --bg: linear-gradient(135deg, #0f172a, #020617 60%, #000);
+      --panel: rgba(17,24,39,.65);
+      --card: rgba(17,24,39,.65);
+      --text: #e5e7eb;
+      --muted:#94a3b8;
+      --border: rgba(148,163,184,.2);
       --brand:#2563eb; --ok:#16a34a; --down:#ef4444; --warn:#f59e0b;
-      --shadow: 0 10px 28px rgba(15,23,42,.10);
+      --shadow: 0 8px 26px rgba(0,0,0,.35);
       --radius: 14px; --focus: 0 0 0 3px color-mix(in srgb, var(--brand) 30%, transparent);
-      --chip: rgba(15,23,42,.05);
-    }
-    @media (prefers-color-scheme: dark){
-      :root{
-        --bg: linear-gradient(180deg,#0b1220,#0d1117);
-        --panel: rgba(17,24,39,.5); --card: rgba(17,24,39,.65);
-        --text: #e5e7eb; --muted:#94a3b8; --border: rgba(148,163,184,.2);
-        --shadow: 0 8px 26px rgba(0,0,0,.35);
-        --chip: rgba(255,255,255,.06);
-      }
+      --chip: rgba(255,255,255,.06);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0; color:var(--text); font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,"PingFang SC","Noto Sans",Arial,sans-serif; background:var(--bg) fixed}
+    body{margin:0; color:var(--text); font:16px/1.6 Arial,Helvetica,sans-serif; background:var(--bg) fixed}
     a{color:inherit; text-decoration:none}
     .container{max-width:1200px; margin:0 auto; padding:20px}
     @media (max-width:1280px){ .container{padding-inline:16px} }
@@ -48,8 +39,7 @@
     .icon-btn:hover{background:rgba(0,0,0,.06)}
     .chip-group{display:flex; gap:6px; background:var(--chip); padding:5px; border-radius:999px}
     .chip{border:0; cursor:pointer; padding:10px 12px; border-radius:999px; background:transparent; color:var(--muted); font-weight:700; touch-action:manipulation}
-    .chip.is-active{background:#0f172a; color:#fff; box-shadow:0 6px 20px rgba(16,24,40,.18)}
-    @media (prefers-color-scheme: dark){ .chip.is-active{background:#e2e8f0; color:#111827} }
+    .chip.is-active{background:#e2e8f0; color:#111827; box-shadow:0 6px 20px rgba(16,24,40,.18)}
     @media (max-width:720px){
       .toolbar{flex-wrap:wrap}
       .brand{order:1; flex:1 1 auto}
@@ -82,9 +72,8 @@
     .chg.up{color:var(--ok)} .chg.down{color:var(--down)}
     .spark{width:120px; height:36px}
     .actions{display:flex; gap:8px}
-    .btn{display:inline-flex; align-items:center; gap:6px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#fff; font-weight:700; cursor:pointer; touch-action:manipulation}
+    .btn{display:inline-flex; align-items:center; gap:6px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#0b1220; color:#e5e7eb; font-weight:700; cursor:pointer; touch-action:manipulation}
     .btn.primary{background:var(--brand); color:#fff; border-color:transparent}
-    @media (prefers-color-scheme: dark){ .btn{background:#0b1220; color:#e5e7eb} }
 
     /* Mobile Cards */
     .cards{display:none}
