@@ -4,6 +4,10 @@
 Winrock RWA is a platform designed to bring real world assets (RWA) onto the blockchain through secure tokenization, enabling new forms of liquidity and transparency.
 Winrock RWA 项目通过区块链将真实世界资产进行安全代币化，实现更高的流动性与透明度。
 
+## Vision | 项目愿景
+Winrock RWA aims to build an open community where tokenized real world assets make finance more transparent and accessible for everyone.
+Winrock RWA 致力于构建一个开放的社区，让真实世界资产的代币化为每个人带来更加透明和易获取的金融服务。
+
 ## Features | 功能特性
 - **Tokenized Issuance** | **代币化发行**: Map physical assets to on-chain tokens via smart contracts.
 - **Cross-Chain Compatibility** | **跨链兼容**: Support multiple blockchain networks for seamless asset transfer.
