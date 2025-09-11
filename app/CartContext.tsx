@@ -7,31 +7,35 @@ interface CartItem {
   name: string;
   price: string;
   image: string;
+  mintNFT: boolean;
 }
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (item: CartItem) => void;
+  addItem: (item: Omit<CartItem, "mintNFT">) => void;
   removeItem: (id: number) => void;
   clearCart: () => void;
-  mintNFT: boolean;
-  setMintNFT: (value: boolean) => void;
+  updateMintNFT: (id: number, value: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [mintNFT, setMintNFT] = useState<boolean>(true);
 
-  const addItem = (item: CartItem) => setItems((prev) => [...prev, item]);
+  const addItem = (item: Omit<CartItem, "mintNFT">) =>
+    setItems((prev) => [...prev, { ...item, mintNFT: false }]);
   const removeItem = (id: number) =>
     setItems((prev) => prev.filter((item) => item.id !== id));
   const clearCart = () => setItems([]);
+  const updateMintNFT = (id: number, value: boolean) =>
+    setItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, mintNFT: value } : item))
+    );
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, clearCart, mintNFT, setMintNFT }}
+      value={{ items, addItem, removeItem, clearCart, updateMintNFT }}
     >
       {children}
     </CartContext.Provider>

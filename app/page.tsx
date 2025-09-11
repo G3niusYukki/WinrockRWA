@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useLanguage } from "./LanguageContext";
-import LanguageSwitcher from "./components/LanguageSwitcher";
 import { useCart } from "./CartContext";
+import CartButton from "./components/CartButton";
 
 interface Product {
   id: number;
@@ -15,7 +15,7 @@ interface Product {
 export default function Home() {
   const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
-  const { addItem, items } = useCart();
+  const { addItem } = useCart();
 
   useEffect(() => {
     fetch("/api/products")
@@ -56,13 +56,7 @@ export default function Home() {
           >
             {t("invite")}
           </button>
-          <a
-            href="/cart"
-            className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm"
-          >
-            {t("cart")} ({items.length})
-          </a>
-          <LanguageSwitcher />
+          <CartButton />
         </div>
       </header>
 
