@@ -5,7 +5,7 @@ import { useCart } from "../CartContext";
 import { useLanguage } from "../LanguageContext";
 
 export default function CartPage() {
-  const { items, removeItem, clearCart, mintNFT, setMintNFT } = useCart();
+  const { items, removeItem, clearCart, updateMintNFT } = useCart();
   const { t } = useLanguage();
 
   return (
@@ -22,26 +22,32 @@ export default function CartPage() {
                 className="flex items-center justify-between border-b border-white/10 pb-2"
               >
                 <span>{item.name}</span>
-                <button
-                  onClick={() => removeItem(item.id)}
-                  className="text-sm text-red-400 hover:text-red-300"
-                >
-                  {t("remove")}
-                </button>
+                <div className="flex items-center gap-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={item.mintNFT}
+                      onChange={(e) => updateMintNFT(item.id, e.target.checked)}
+                    />
+                    {t("mintOption")}
+                  </label>
+                  <button
+                    onClick={() => removeItem(item.id)}
+                    className="text-sm text-red-400 hover:text-red-300"
+                  >
+                    {t("remove")}
+                  </button>
+                </div>
               </div>
             ))}
-            <div className="flex items-center justify-between mt-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={mintNFT}
-                  onChange={(e) => setMintNFT(e.target.checked)}
-                />
-                {t("mintOption")}
-              </label>
+            <div className="flex items-center justify-end mt-4">
               <button
                 onClick={() => {
-                  alert(`${t("checkout")}: ${mintNFT ? "NFT" : "no NFT"}`);
+                  const nftItems = items
+                    .filter((i) => i.mintNFT)
+                    .map((i) => i.name)
+                    .join(", ");
+                  alert(`${t("checkout")}: ${nftItems || "no NFT"}`);
                   clearCart();
                 }}
                 className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm"
@@ -63,4 +69,3 @@ export default function CartPage() {
     </div>
   );
 }
-
