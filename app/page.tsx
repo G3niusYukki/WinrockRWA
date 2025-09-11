@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLanguage } from "./LanguageContext";
 import LanguageSwitcher from "./components/LanguageSwitcher";
+import { useCart } from "./CartContext";
 
 interface Product {
   id: number;
@@ -14,6 +15,7 @@ interface Product {
 export default function Home() {
   const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
+  const { addItem, items } = useCart();
 
   useEffect(() => {
     fetch("/api/products")
@@ -38,6 +40,28 @@ export default function Home() {
           >
             {t("register")}
           </a>
+          <button
+            onClick={() => navigator.clipboard.writeText(window.location.href)}
+            className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm"
+          >
+            {t("share")}
+          </button>
+          <button
+            onClick={() =>
+              navigator.clipboard.writeText(
+                `${window.location.origin}/register?ref=12345`
+              )
+            }
+            className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm"
+          >
+            {t("invite")}
+          </button>
+          <a
+            href="/cart"
+            className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm"
+          >
+            {t("cart")} ({items.length})
+          </a>
           <LanguageSwitcher />
         </div>
       </header>
@@ -60,6 +84,12 @@ export default function Home() {
               <div className="p-4">
                 <h3 className="text-sm font-semibold mb-2">{product.name}</h3>
                 <p className="text-indigo-300 text-sm">{product.price}</p>
+                <button
+                  onClick={() => addItem(product)}
+                  className="mt-2 w-full px-2 py-1 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm"
+                >
+                  {t("addToCart")}
+                </button>
               </div>
             </div>
           ))}
