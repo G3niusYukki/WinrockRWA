@@ -38,6 +38,12 @@ export default function Home() {
           >
             {t("register")}
           </a>
+          <a
+            href="/affiliate/index.html"
+            className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition-colors text-sm"
+          >
+            {t("navAffiliate")}
+          </a>
           <LanguageSwitcher />
         </div>
       </header>
