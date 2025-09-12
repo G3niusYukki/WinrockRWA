@@ -3,6 +3,13 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --bg-gradient: linear-gradient(135deg, #0f172a, #020617 60%, #000);
+}
+
+.light {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --bg-gradient: linear-gradient(135deg, #f8fafc, #e2e8f0 60%, #cbd5e1);
 }
 
 @theme inline {
@@ -13,7 +20,7 @@
 }
 
 body {
-  background: linear-gradient(135deg, #0f172a, #020617 60%, #000);
+  background: var(--bg-gradient);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }

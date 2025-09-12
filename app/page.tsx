@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-black to-slate-900 text-gray-100">
+    <div className="min-h-screen text-[var(--foreground)]">
       <header className="max-w-6xl mx-auto flex items-center justify-between p-6">
         <h1 className="text-2xl font-bold">{t("siteTitle")}</h1>
         <div className="flex items-center gap-4">
